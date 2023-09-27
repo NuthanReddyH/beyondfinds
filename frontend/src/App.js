@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Home from "./components/Home/Home";
 import Footer from "./components/Footer/Footer";
 import Header from "./components/header/Header";
+import Login from "./components/login/Login";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <main className="container mx-auto px-4 sm:px-6 lg:px-8">
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
           </Routes>
         </main>
         <Footer />
