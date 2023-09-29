@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   return (
@@ -84,12 +85,12 @@ const Header = () => {
                 />
               </svg>
             </button>
-            <button className="text-gray-500 hover:text-gray-700 focus:outline-none ">
+            <Link to="/about" className="text-gray-500 hover:text-gray-700 focus:outline-none ">
               About Us
-            </button>
-            <button className="text-gray-500 hover:text-gray-700 focus:outline-none">
+            </Link>
+            <Link to="/login" className="text-gray-500 hover:text-gray-700 focus:outline-none">
               Login
-            </button>
+            </Link>
           </div>
         </div>
       </nav>
