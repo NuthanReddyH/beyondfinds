@@ -1,11 +1,23 @@
-const bcrypt = require("bcrypt");
-const User = require("./models/User");
+const bcrypt = require('bcrypt');
+const User = require('./models/User');
+const jwt = require('jsonwebtoken');
 
 const resolvers = {
   Query: {
-    getUserByUsername: async (_, { username }) => {
+    getUser: async (_, { username, password }) => {
       try {
         const user = await User.findOne({ username });
+
+        if (!user) {
+          throw new Error("User not found.");
+        }
+
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+
+        if (!isPasswordValid) {
+          throw new Error("Invalid password.");
+        }
+
         return user;
       } catch (error) {
         throw error;
@@ -15,32 +27,32 @@ const resolvers = {
   Mutation: {
     registerUser: async (_, { username, email, password, confirmPassword }) => {
       try {
-        // Check if the password and confirmPassword match
+
         if (password !== confirmPassword) {
-          throw new Error("Passwords do not match.");
+          throw new Error('Passwords do not match.');
         }
-
-        // Check if a user with the same username or email already exists
-        const existingUser = await User.findOne({
-          $or: [{ username }, { email }],
-        });
-        if (existingUser) {
-          throw new Error("Username or email already in use.");
+  
+        const existingUsername = await User.findOne({ username });
+        if (existingUsername) {
+          throw new Error('Username already in use.');
         }
-
-        // Hash the password before storing it
+  
+        const existingEmail = await User.findOne({ email });
+        if (existingEmail) {
+          throw new Error('Email already in use.');
+        }
+  
         const hashedPassword = await bcrypt.hash(password, 10);
-
-        // Create a new user
+  
         const newUser = new User({
           username,
           email,
           password: hashedPassword,
         });
-
+  
         await newUser.save();
-
-        return newUser;
+  
+       return newUser;
       } catch (error) {
         throw error;
       }
