@@ -49,3 +49,8 @@ main {
     transform: rotate(360deg);
   }
 }
+
+.auth-link {
+  color: #23B0BE;
+  text-decoration: underline;
+}

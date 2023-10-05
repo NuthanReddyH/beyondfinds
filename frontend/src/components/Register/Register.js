@@ -8,13 +8,14 @@ import {
   ThemeProvider,
   IconButton,
   InputAdornment,
-  Alert,
+  FormControlLabel,
+  Checkbox
 } from "@mui/material";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
-import loginImg from "../../assets/login.png";
+import RegisterImg from "../../assets/register.png";
 import { Link, useNavigate } from "react-router-dom";
-import { useLazyQuery } from "@apollo/client";
-import { GET_USER } from "../../graphql/queries";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { useMutation } from "@apollo/client";
+import { REGISTER_USER } from "../../graphql/mutations";
 
 const theme = createTheme({
   typography: {
@@ -27,27 +28,19 @@ const theme = createTheme({
   },
 });
 
-const Login = () => {
+const Register = () => {
   const [formData, setFormData] = useState({
     username: "",
+    email: "",
     password: "",
+    confirmPassword: "",
   });
 
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
-
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [registerUser, { loading, error }] = useMutation(REGISTER_USER);
   const navigate = useNavigate();
-
-  const [getUser, { loading }] = useLazyQuery(GET_USER, {
-    onError: (error) => {
-      setErrors({ username: "Invalid credentials" });
-    },
-    onCompleted: (data) => {
-      if (data && data.getUser) {
-        navigate("/");
-      }
-    },
-  });
 
   const handleChange = (event) => {
     const { id, value } = event.target;
@@ -58,10 +51,12 @@ const Login = () => {
     setShowPassword(!showPassword);
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
+  const toggleShowConfirmPassword = () => {
+    setShowConfirmPassword(!showConfirmPassword);
+  };
 
-    setErrors({});
+  const handleSubmit = async (event) => {
+    event.preventDefault();
 
     const newErrors = {};
 
@@ -69,8 +64,20 @@ const Login = () => {
       newErrors.username = "Username is required";
     }
 
+    if (!formData.email) {
+      newErrors.email = "Email is required";
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = "Invalid email format";
+    }
+
     if (!formData.password) {
       newErrors.password = "Password is required";
+    }
+
+    if (!formData.confirmPassword) {
+      newErrors.confirmPassword = "Confirm Password is required";
+    } else if (formData.password !== formData.confirmPassword) {
+      newErrors.confirmPassword = "Passwords do not match";
     }
 
     if (Object.keys(newErrors).length > 0) {
@@ -78,12 +85,24 @@ const Login = () => {
       return;
     }
 
-    getUser({
-      variables: {
-        username: formData.username,
-        password: formData.password,
-      },
-    });
+    try {
+      const { data } = await registerUser({
+        variables: formData,
+      });
+      if (data && data.registerUser) {
+        navigate("/login");
+      }
+    } catch (error) {
+      console.log({error})
+      if (error.message.includes("username")) {
+        newErrors.username = error.message;
+      } else if (error.message.includes("email")) {
+        newErrors.email = error.message;
+      } else {
+        console.error("Registration Error:", error.message);
+      }
+    }
+    setErrors(newErrors);
   };
 
   return (
@@ -96,8 +115,8 @@ const Login = () => {
         }}
       >
         <img
-          src={loginImg}
-          alt="Login Image"
+          src={RegisterImg}
+          alt="Register Image"
           style={{ maxWidth: "50%", marginRight: "2rem" }}
         />
 
@@ -107,10 +126,7 @@ const Login = () => {
               variant="h4"
               style={{ textAlign: "left", marginBottom: "1rem" }}
             >
-              Welcome To BeyondFinds
-            </Typography>
-            <Typography style={{ textAlign: "left", marginBottom: "1rem" }}>
-              Please login to your account
+              Register Your Account
             </Typography>
             <TextField
               id="username"
@@ -120,7 +136,17 @@ const Login = () => {
               value={formData.username}
               onChange={handleChange}
               error={!!errors.username}
-              helperText={errors.username || ""}
+              helperText={errors.username}
+            />
+            <TextField
+              id="email"
+              label="Email Address"
+              variant="outlined"
+              margin="normal"
+              value={formData.email}
+              onChange={handleChange}
+              error={!!errors.email}
+              helperText={errors.email}
             />
             <TextField
               id="password"
@@ -131,7 +157,7 @@ const Login = () => {
               value={formData.password}
               onChange={handleChange}
               error={!!errors.password}
-              helperText={errors.password || ""}
+              helperText={errors.password}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
@@ -142,34 +168,50 @@ const Login = () => {
                 ),
               }}
             />
+            <TextField
+              id="confirmPassword"
+              label="Confirm Password"
+              type={showConfirmPassword ? "text" : "password"}
+              variant="outlined"
+              margin="normal"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              error={!!errors.confirmPassword}
+              helperText={errors.confirmPassword}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={toggleShowConfirmPassword}>
+                      {showConfirmPassword ? <Visibility /> : <VisibilityOff />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
             <Typography
               variant="body2"
               style={{ textAlign: "left", margin: "0.5rem 0" }}
             >
-              <Link to="#">Forgot password?</Link>
+              By registering, I accept the{" "}
+              <Link to="#">Terms & Conditions</Link> and{" "}
+              <Link to="#">Privacy Policy.</Link>
             </Typography>
-            {errors.general && (
-              <Alert severity="error" style={{ marginBottom: "1rem" }}>
-                {errors.general}
-              </Alert>
-            )}
             <Button
               variant="contained"
               color="primary"
               fullWidth
               style={{ marginTop: "1rem", color: "white" }}
               type="submit"
-              disabled={loading}
             >
-              {loading ? "Logging In..." : "Login"}
+              Sign Up
             </Button>
             <Typography
               variant="body2"
               style={{ textAlign: "left", marginTop: "1rem" }}
             >
-              Don't have an account?{" "}
-              <Link className="auth-link" to="/register">
-                Register
+              Already have an account?{" "}
+              <Link className="auth-link" to="/login">
+                Login
               </Link>
             </Typography>
           </Box>
@@ -179,4 +221,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;
