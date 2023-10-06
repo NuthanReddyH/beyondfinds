@@ -38,7 +38,7 @@ const CustomCard = styled(Card)(({ theme }) => ({
     textAlign: "center",
     color: "#fff",
     transition: "opacity 0.3s ease-in-out",
-    opacity: 0,
+    opacity: 1,
   },
   "&:hover .image-overlay": {
     opacity: 1,
@@ -60,7 +60,9 @@ const ImageCard = ({ image, title, buttonText }) => {
   return (
     <ThemeProvider theme={theme}>
       <CustomCard>
-        <CardMedia component="img" height="100"  width="auto" image={image} alt={title} />
+        <div className="overlay-img">
+        <CardMedia component="img"  width="100%" image={image} alt={title} />
+        </div>
         <div className="image-overlay">
           <Typography gutterBottom variant="h5" component="div">
             {title}

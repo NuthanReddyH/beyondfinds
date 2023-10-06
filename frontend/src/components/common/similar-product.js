@@ -4,14 +4,14 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 
-const ProductCard = ({ product,height }) => {
+const SimilarCard = ({ product,height }) => {
   return (
-    <div style={{height: height}}>
-      <div className='common-img'>
+    <Card className='product-wrapper'>
+        <div className='product-card'>
+      <div className='image'>
       <CardMedia
         component="img"
         alt={product.name}
-        height="200"
         image={product.imageURL}
         title={product.name}
       />
@@ -24,8 +24,9 @@ const ProductCard = ({ product,height }) => {
           {product.price}
         </Typography>
       </CardContent>
-    </div>
+      </div>
+    </Card>
   );
 };
 
-export default ProductCard;
+export default SimilarCard;

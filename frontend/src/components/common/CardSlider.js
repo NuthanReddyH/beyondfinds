@@ -2,7 +2,7 @@ import React from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import ProductCard from "../common/Card";
+import SimilarCard from "../common/similar-product";
 import recent1 from '../../assets/recent1.png';
 import recent2 from '../../assets/recent2.png';
 import recent3 from '../../assets/recent3.png';
@@ -22,12 +22,13 @@ const recentProducts = [
 
 export const CardSlider = ({ products }) => {
   const settings = {
-    dots: true,
+    dots: false,
+    arrow: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 4,
+    slidesToShow: 3,
     slidesToScroll: 1,
-    autoplay: true,
+    autoplay: false,
     autoplaySpeed: 1000,
   };
 
@@ -39,7 +40,7 @@ export const CardSlider = ({ products }) => {
         <Slider {...settings}>
           {recentProducts.map((product) => (
             <div key={product.id} className="carousel-item">
-              <ProductCard product={product} height={"100%"} productHeight={"400px"}/>
+              <SimilarCard product={product} productHeight={"400px"}/>
             </div>
           ))}
         </Slider>

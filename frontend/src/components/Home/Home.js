@@ -1,5 +1,6 @@
 import React from "react";
-import bannerImage from "../../assets/banner.jpg";
+import './Home.css';
+import bannerImage from "../../assets/banner.png";
 import { Typography, Grid } from "@mui/material";
 import ProductCard from "../common/Card";
 import popular1 from "../../assets/popular1.png";
@@ -12,6 +13,7 @@ import sell3 from "../../assets/sell3.png";
 import { createTheme, ThemeProvider } from "@mui/material";
 import CardGroup from "../common/CardGroup";
 import { CardSlider } from "../common/CardSlider";
+import { motion } from "framer-motion"; 
 
 const theme = createTheme({
   typography: {
@@ -59,9 +61,15 @@ const Home = () => {
   return (
     <ThemeProvider theme={theme}>
       <div>
-        <img src={bannerImage} alt="Banner" />
+        <div className="banner-img">
+            <img src={bannerImage} alt="Banner" />
+            <motion.h1 initial={{ marginTop:-100 }}
+            animate={{ marginTop:0 }} transition={{
+                duration: 0.6,  
+                ease: "easeOut", }}>Shop Smart, Sell Smarter</motion.h1>
+        </div>
         <div
-          style={{ marginTop: "3rem", marginBottom: "3rem", textAlign: "left" }}
+          style={{ marginTop: "8rem", marginBottom: "8rem", textAlign: "left" }}
         >
           <Typography variant="h4" gutterBottom>
             Popular Products
@@ -78,25 +86,25 @@ const Home = () => {
           <CardGroup />
         </div>
         <div
-          style={{ marginTop: "3rem", marginBottom: "3rem", textAlign: "left" }}
+          style={{ marginTop: "8rem", marginBottom: "8rem", textAlign: "left" }}
         >
           <Typography variant="h4" gutterBottom>
             Start Selling
           </Typography>
           <Grid
             container
-            spacing={2}
+            spacing={8}
             style={{ justifyContent: "space-between" }}
           >
             {sellProducts.map((product) => (
-              <Grid item xs={12} sm={6} md={3} key={product.id}>
+              <Grid item xs={12} sm={6} md={4} key={product.id}>
                 <ProductCard product={product} height={"100%"} />
               </Grid>
             ))}
           </Grid>
         </div>
         <div
-          style={{ marginTop: "3rem", marginBottom: "3rem", textAlign: "left" }}
+          style={{ marginTop: "8rem", marginBottom: "7rem", textAlign: "left" }}
         >
           <Typography variant="h4" gutterBottom>
             You Might Also Like
