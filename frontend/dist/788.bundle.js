@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkfrontend=self.webpackChunkfrontend||[]).push([[788],{4788:function(e,n,t){t.r(n),t.d(n,{default:function(){return c}});var r=t(7294),a=t.p+"a03c2ae564baeebc7db794e247a988f6.jpg",c=function(){return r.createElement("div",null,r.createElement("img",{src:a,alt:"Banner"}))}}}]);

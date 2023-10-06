@@ -20,6 +20,11 @@ main {
   min-height: 70vh;
 }
 
+.slick-prev:before, .slick-next:before {
+  font-size: 38px !important;
+  color: #23B0BE !important;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
