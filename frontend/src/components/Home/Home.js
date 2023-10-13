@@ -32,6 +32,8 @@ const Home = () => {
     { id: 2, name: "Parka", price: "$29.99", imageURL: popular2 },
     { id: 3, name: "Tops", price: "$39.99", imageURL: popular3 },
     { id: 4, name: "Knitwear", price: "$49.99", imageURL: popular4 },
+    { id: 5, name: "Sweater", price: "$49.99", imageURL: popular1 },
+    { id: 6, name: "Parka", price: "$49.99", imageURL: popular2 },
   ];
 
   const sellProducts = [
@@ -56,6 +58,7 @@ const Home = () => {
         "There are zero selling fees, so what you earn is yours to keep. You’ll be paid as soon as the buyer confirms everything’s OK.",
       imageURL: sell3,
     },
+    
   ];
 
   return (
@@ -76,15 +79,15 @@ const Home = () => {
           </Typography>
           <Grid container spacing={2}>
             {popularProducts.map((product) => (
-              <Grid item xs={12} sm={6} md={3} key={product.id}>
+              <Grid item xs={12} sm={6} md={4} lg={2} key={product.id}>
                 <ProductCard product={product} />
               </Grid>
             ))}
           </Grid>
         </div>
-        <div>
+        {/* <div>
           <CardGroup />
-        </div>
+        </div> */}
         <div
           style={{ marginTop: "8rem", marginBottom: "8rem", textAlign: "left" }}
         >
@@ -93,8 +96,8 @@ const Home = () => {
           </Typography>
           <Grid
             container
-            spacing={8}
-            style={{ justifyContent: "space-between" }}
+            spacing={4}
+            style={{ justifyContent: "space-between" }} className="start-selling"
           >
             {sellProducts.map((product) => (
               <Grid item xs={12} sm={6} md={4} key={product.id}>
@@ -102,6 +105,7 @@ const Home = () => {
               </Grid>
             ))}
           </Grid>
+          <button className="common-btn">Sell Now</button>
         </div>
         <div
           style={{ marginTop: "8rem", marginBottom: "7rem", textAlign: "left" }}
@@ -111,7 +115,7 @@ const Home = () => {
           </Typography>
           <Grid
             container
-            spacing={2}
+            spacing={1}
             style={{ marginTop: "1rem", marginBottom: "1rem" }}
           >
             <CardSlider />

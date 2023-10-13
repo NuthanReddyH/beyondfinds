@@ -3,9 +3,9 @@ import "./footer.css";
 
 const Footer = () => { 
   return (
-    <footer className="flex flex-col items-center lg:text-left max-w-screen-xl mx-auto">
-      <div className="container py-8">
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 text-black">
+    <footer>
+      <div className=" container mx-auto py-8 lg:px-16 sm:px-8">
+        <div className="flex justify-between text-left">
           <div>
             <h5 className="mb-2.5 font-bold">Shop</h5>
 
@@ -62,7 +62,7 @@ const Footer = () => {
         </div>
       </div>
 
-      <div className="w-full p-2 text-center copyright">
+      <div className="p-2 text-center copyright">
         <p>
         © Copyright BeyondFinds 2023 | All rights reserved.</p>
       </div>

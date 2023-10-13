@@ -6,7 +6,7 @@ const Header = () => {
   return (
     <div>
       <nav className="bg-white">
-        <div className="max-w-screen-xl flex items-center justify-between mx-auto py-4">
+        <div className="container flex items-center justify-between mx-auto py-4 lg:px-16 sm:px-8">
         <Link to="/" className="flex items-center">
             <img
               src={companyLogo}
@@ -97,8 +97,8 @@ const Header = () => {
           </div>
         </div>
       </nav>
-      <div className="bottom-nav bg-gray-100 py-4">
-        <ul className="flex justify-between max-w-screen-xl mx-auto">
+      <div className="bottom-nav bg-gray-100 py-4 ">
+        <ul className="flex justify-between container mx-auto lg:px-16 sm:px-8">
           <li>
             <a href="/">Fashion</a>
           </li>
