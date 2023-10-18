@@ -79,7 +79,7 @@ const Home = () => {
           </Typography>
           <Grid container spacing={2}>
             {popularProducts.map((product) => (
-              <Grid item xs={12} sm={6} md={4} lg={2} key={product.id}>
+              <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={product.id}>
                 <ProductCard product={product} />
               </Grid>
             ))}
@@ -113,13 +113,8 @@ const Home = () => {
           <Typography variant="h4" gutterBottom>
             You Might Also Like
           </Typography>
-          <Grid
-            container
-            spacing={1}
-            style={{ marginTop: "1rem", marginBottom: "1rem" }}
-          >
+          
             <CardSlider />
-          </Grid>
         </div>
       </div>
     </ThemeProvider>
