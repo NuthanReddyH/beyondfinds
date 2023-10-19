@@ -8,14 +8,11 @@ import {
   ThemeProvider,
   IconButton,
   InputAdornment,
-  FormControlLabel,
-  Checkbox
 } from "@mui/material";
 import RegisterImg from "../../assets/register.png";
 import { Link, useNavigate } from "react-router-dom";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { useMutation } from "@apollo/client";
-import { REGISTER_USER } from "../../graphql/mutations";
+import { registerUser } from "../../api/auth";
 
 const theme = createTheme({
   typography: {
@@ -39,7 +36,6 @@ const Register = () => {
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [registerUser, { loading, error }] = useMutation(REGISTER_USER);
   const navigate = useNavigate();
 
   const handleChange = (event) => {
@@ -86,21 +82,13 @@ const Register = () => {
     }
 
     try {
-      const { data } = await registerUser({
-        variables: formData,
-      });
-      if (data && data.registerUser) {
+      const response = await registerUser(formData);
+
+      if (response) {
         navigate("/login");
       }
     } catch (error) {
-      console.log({error})
-      if (error.message.includes("username")) {
-        newErrors.username = error.message;
-      } else if (error.message.includes("email")) {
-        newErrors.email = error.message;
-      } else {
-        console.error("Registration Error:", error.message);
-      }
+      console.error("Registration Error:", error);
     }
     setErrors(newErrors);
   };

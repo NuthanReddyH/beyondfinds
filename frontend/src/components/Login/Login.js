@@ -9,12 +9,13 @@ import {
   IconButton,
   InputAdornment,
   Alert,
+  Snackbar,
+  SnackbarContent,
 } from "@mui/material";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { Visibility, VisibilityOff, Close } from "@mui/icons-material";
 import loginImg from "../../assets/login.png";
 import { Link, useNavigate } from "react-router-dom";
-import { useLazyQuery } from "@apollo/client";
-import { GET_USER } from "../../graphql/queries";
+import { loginUser } from "../../api/auth";
 
 const theme = createTheme({
   typography: {
@@ -35,19 +36,9 @@ const Login = () => {
 
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
-
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
   const navigate = useNavigate();
-
-  const [getUser, { loading }] = useLazyQuery(GET_USER, {
-    onError: (error) => {
-      setErrors({ username: "Invalid credentials" });
-    },
-    onCompleted: (data) => {
-      if (data && data.getUser) {
-        navigate("/");
-      }
-    },
-  });
 
   const handleChange = (event) => {
     const { id, value } = event.target;
@@ -58,9 +49,17 @@ const Login = () => {
     setShowPassword(!showPassword);
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
+  const handleSnackbarOpen = (message) => {
+    setSnackbarMessage(message);
+    setSnackbarOpen(true);
+  };
 
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     setErrors({});
 
     const newErrors = {};
@@ -78,12 +77,12 @@ const Login = () => {
       return;
     }
 
-    getUser({
-      variables: {
-        username: formData.username,
-        password: formData.password,
-      },
-    });
+    try {
+      await loginUser(formData.username, formData.password);
+      navigate("/");
+    } catch (error) {
+      handleSnackbarOpen("Login failed. Please check your credentials.");
+    }
   };
 
   return (
@@ -148,20 +147,15 @@ const Login = () => {
             >
               <Link to="#">Forgot password?</Link>
             </Typography>
-            {errors.general && (
-              <Alert severity="error" style={{ marginBottom: "1rem" }}>
-                {errors.general}
-              </Alert>
-            )}
+      
             <Button
               variant="contained"
               color="primary"
               fullWidth
               style={{ marginTop: "1rem", color: "white" }}
               type="submit"
-              disabled={loading}
             >
-              {loading ? "Logging In..." : "Login"}
+              Login
             </Button>
             <Typography
               variant="body2"
@@ -175,6 +169,27 @@ const Login = () => {
           </Box>
         </form>
       </div>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+      >
+        <SnackbarContent
+          message={snackbarMessage}
+          style={{ backgroundColor: "#FF3D00" }}
+          action={
+            <IconButton
+              size="small"
+              aria-label="close"
+              color="inherit"
+              onClick={handleSnackbarClose}
+            >
+              <Close fontSize="small" />
+            </IconButton>
+          }
+        />
+      </Snackbar>
     </ThemeProvider>
   );
 };

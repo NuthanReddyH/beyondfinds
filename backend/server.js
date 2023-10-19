@@ -1,30 +1,41 @@
 const express = require('express');
-const { ApolloServer } = require('apollo-server-express');
 const mongoose = require('mongoose');
-const typeDefs = require('./typeDefs');
-const resolvers = require('./resolvers');
+const bodyParser = require('body-parser');
+const passport = require('./passport');
+const router = require('./routes/index');
+const cors = require('cors');
+const app = express();
 
-async function startServer() {
-  const app = express();
+// Middleware
+app.use(cors({
+  origin: function(origin, callback) {
+    if (!origin) return callback(null, true);
+    const allowedOrigins = ['http://localhost:3000'];
+    if (allowedOrigins.indexOf(origin) === -1) {
+      var msg = 'The CORS policy for this site does not ' +
+                'allow access from the specified Origin.';
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
+  credentials: true,
+  optionSuccessStatus: 200
+}));
 
-  const apolloServer = new ApolloServer({
-    typeDefs,
-    resolvers
-  });
+app.use(bodyParser.json());
+app.use(passport.initialize());
 
-  await apolloServer.start();
-  apolloServer.applyMiddleware({ app });
+app.use('/api', router);
 
-  const uri = 'mongodb+srv://beyondfinds2023:marketplace2023@cluster0.iil9f3d.mongodb.net/?retryWrites=true&w=majority';
-  await mongoose.connect(uri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
+const uri = process.env.DATABASE_URL;
+mongoose.connect(uri, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
-  console.log('DB has connected Successfully');
-  app.listen(8080, () => {
-    console.log('App is running at port 8080!!!');
-  });
-}
+console.log('DB has connected Successfully')
 
-startServer();
+const port = process.env.PORT || 8080;
+app.listen(port, () => {
+  console.log(`App is running at port ${port}!!!`);
+});
