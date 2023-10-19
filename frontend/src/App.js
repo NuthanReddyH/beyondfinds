@@ -7,7 +7,7 @@ import ErrorPage from "./components/ErrorPage/Error";
 
 const Home = lazy(() => import("./components/Home/Home"));
 const Footer = lazy(() => import("./components/Footer/Footer"));
-const Header = lazy(() => import("./components/header/Header"));
+const Header = lazy(() => import("./components/Header/Header"));
 const Login = lazy(() => import("./components/login/Login"));
 const Register = lazy(() => import("./components/Register/Register"));
 
@@ -18,7 +18,7 @@ function App() {
       <Router>
         <Suspense fallback={<Loader />}>
           <Header />
-          <main className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <main className="container mx-auto lg:px-16 sm:px-8">
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />

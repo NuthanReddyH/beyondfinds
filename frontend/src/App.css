@@ -6,6 +6,7 @@ body {
   
 }
 
+
 .App {
   text-align: center;
 }
@@ -20,9 +21,37 @@ main {
   min-height: 70vh;
 }
 
+.common-btn{
+  border: 2px solid #23B0BE;
+  padding: 8px 30px;
+  color: #23B0BE;
+  margin: 10px auto;
+  display: block;  
+  background: linear-gradient(to right, #23B0BE 50%, white 50%);
+  background-size: 200% 100%;
+  background-position: right bottom;
+  transition: 0.6s ease all;
+}
+.common-btn:hover{
+  background-position: left bottom;
+    color: #ffffff;
+}
+
+.slick-prev, .slick-next
+{
+  width:30px !important;
+  height:50px !important;
+}
+
+.slick-next{
+  right: -50px !important;
+}
+
+.slick-prev{
+  left: -50px !important;
+}
 .slick-prev:before, .slick-next:before {
-  font-size: 38px !important;
-  color: #23B0BE !important;
+  display: none;
 }
 
 @media (prefers-reduced-motion: no-preference) {

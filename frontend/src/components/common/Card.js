@@ -6,7 +6,8 @@ import Typography from '@mui/material/Typography';
 
 const ProductCard = ({ product,height }) => {
   return (
-    <div style={{height: height}}>
+    <Card style={{height: height}} className='no-shadow'>
+      <a>
       <div className='common-img'>
       <CardMedia
         component="img"
@@ -24,7 +25,8 @@ const ProductCard = ({ product,height }) => {
           {product.price}
         </Typography>
       </CardContent>
-    </div>
+      </a>
+    </Card>
   );
 };
 

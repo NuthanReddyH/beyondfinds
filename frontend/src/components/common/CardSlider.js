@@ -9,6 +9,8 @@ import recent3 from '../../assets/recent3.png';
 import recent4 from '../../assets/recent4.png';
 import recent5 from '../../assets/recent5.png';
 import recent6 from '../../assets/recent6.png';
+import nextImage from '../../assets/next.png';
+import previousImage from '../../assets/previous.png';
 
 
 const recentProducts = [
@@ -20,16 +22,47 @@ const recentProducts = [
   { id: 6, name: "Shoes", price: "$49.99", imageURL: recent6 },
 ];
 
+
 export const CardSlider = ({ products }) => {
   const settings = {
     dots: false,
     arrow: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 3,
+    slidesToShow: 5,
     slidesToScroll: 1,
     autoplay: false,
     autoplaySpeed: 1000,
+    responsive: [
+      {
+        breakpoint: 1444,
+        settings: {
+          slidesToShow: 3,
+        }
+      },
+      {
+        breakpoint: 991,
+        settings: {
+          slidesToShow: 2,
+        }
+      },
+      {
+        breakpoint: 767,
+        settings: {
+          slidesToShow: 1,
+        }
+      }
+    ],
+    prevArrow: (
+      <button className="custom-slick-prev">
+        <img src={previousImage} alt="Previous" />
+      </button>
+    ),
+    nextArrow: (
+      <button className="custom-slick-next">
+        <img src={nextImage} alt="Next" />
+      </button>
+    ),
   };
 
   console.log({ products });
