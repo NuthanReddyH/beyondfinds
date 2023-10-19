@@ -1,8 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import companyLogo from "../../assets/logo.png"
 
 const Header = () => {
+  const token = localStorage.getItem("token");
+  console.log({token})
+  const [loggedIn, setLoggedIn] = useState(!!token);
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('userInfo');
+    setLoggedIn(false);
+  };
+
+
   return (
     <div>
       <nav className="bg-white">
@@ -88,22 +99,28 @@ const Header = () => {
                 />
               </svg>
             </button>
-            <Link to="/about" className="text-gray-500 hover:text-gray-700 focus:outline-none ">
-              About Us
-            </Link>
-            <Link to="/login" className="text-gray-500 hover:text-gray-700 focus:outline-none">
-              Login
-            </Link>
-            <Link to="/category" className="text-gray-500 hover:text-gray-700 focus:outline-none">
-              Category
-            </Link>
+            {loggedIn ? (
+              <button
+                type="button"
+                onClick={handleLogout}
+                className="text-gray-500 hover:text-gray-700 focus:outline-none"
+              >
+                Logout
+              </button>
+            ) : (
+              <Link to="/login" className="text-gray-500 hover:text-gray-700 focus:outline-none mt-1">
+                Login
+              </Link>
+            )}
           </div>
         </div>
       </nav>
       <div className="bottom-nav bg-gray-100 py-4 ">
         <ul className="flex justify-between container mx-auto lg:px-16 sm:px-8">
           <li>
-            <a href="/">Fashion</a>
+          <Link to="/category" className="hover:text-gray-700 focus:outline-none">
+              Fashion
+            </Link>
           </li>
           <li>
             <a href="/">Electronics</a>

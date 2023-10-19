@@ -2,10 +2,11 @@ const passport = require("passport");
 const JwtStrategy = require("passport-jwt").Strategy;
 const ExtractJwt = require("passport-jwt").ExtractJwt;
 const User = require("./models/User");
+require('dotenv').config();
 
 const options = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-  secretOrKey: "BYONDFNDS2023",
+  secretOrKey: process.env.JWT_SECRET_KEY,
 };
 
 passport.use(
