@@ -10,6 +10,7 @@ const Footer = lazy(() => import("./components/Footer/Footer"));
 const Header = lazy(() => import("./components/Header/Header"));
 const Login = lazy(() => import("./components/login/Login"));
 const Register = lazy(() => import("./components/Register/Register"));
+const IndividualCategory = lazy(() => import("./components/IndividualCategory/IndividualCategory"));
 
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="*" element={<ErrorPage />} />
+              <Route path="/category" element={<IndividualCategory />} />
             </Routes>
           </main>
           <Footer />

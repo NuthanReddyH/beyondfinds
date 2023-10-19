@@ -35,9 +35,9 @@ export const CardSlider = ({ products }) => {
     autoplaySpeed: 1000,
     responsive: [
       {
-        breakpoint: 1444,
+        breakpoint: 1500,
         settings: {
-          slidesToShow: 3,
+          slidesToShow: 4,
         }
       },
       {
