@@ -5,6 +5,8 @@ const categoryController = require('../controllers/categoryController');
 categoryRouter.get('/:categoryId/products', categoryController.getProductsByCategory);
 categoryRouter.get('/:categoryId/subcategories', categoryController.getSubcategoriesByCategory);
 categoryRouter.get('/allcategories', categoryController.getCategories);
+categoryRouter.get('/products/subcategory/:subcategoryId', categoryController.getProductsBySubcategory);
+
 
 
 module.exports = categoryRouter;

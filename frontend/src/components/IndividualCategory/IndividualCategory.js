@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   fetchSubcategories,
   fetchProductsByCategory,
+  fetchProductsBySubcategory
 } from "../../data/productThunk";
 import ProductCard from "../common/Card";
 import {
@@ -98,9 +99,14 @@ const IndividualCategory = () => {
   );
 
   // Handling loading and error states
-  if (loading) return <p><Loader /></p>; 
-  if (error) return <p><ErrorPage /></p>;
+  if (loading) return   <Loader />; 
+  if (error) return <ErrorPage />;
 
+  const handleSubcategoryClick = (subcategoryId) => {
+    console.log({subcategories})
+    dispatch(fetchProductsBySubcategory(subcategoryId));
+  };
+  
   const renderSubcategories = () => {
     return subcategories.map((sub) => (
       <Grid
@@ -112,7 +118,7 @@ const IndividualCategory = () => {
         key={sub.id}
         className="no-shadow"
       >
-        <div className="subcategory-item">
+        <div className="subcategory-item" onClick={() => handleSubcategoryClick(sub._id)}>
           <div className="icon">
             <img src={getImage(sub.imageUrl)} alt={sub.name} />
           </div>

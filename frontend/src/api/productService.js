@@ -30,3 +30,14 @@ export const getCategories = async () => {
     throw error;
   }
 };
+
+export const getProductsBySubcategory = async (subcategoryId) => {
+  try {
+    const response = await api.get(`/categories/products/subcategory/${subcategoryId}`);
+    return response.data.data;
+  } catch (error) {
+    console.error('There was an error fetching the products by subcategory!', error);
+    throw error;
+  }
+};
+

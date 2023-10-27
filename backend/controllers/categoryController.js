@@ -57,3 +57,32 @@ exports.getSubcategoriesByCategory = async (req, res) => {
     });
   }
 };
+
+
+// Handler to fetch products by subcategory
+exports.getProductsBySubcategory = async (req, res) => {
+  try {
+    const subcategoryId = req.params.subcategoryId;
+    const products = await Product.find({ subcategory: subcategoryId })
+      .populate('category')
+      .populate('subcategory');
+
+    if (products.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: 'No products found for this subcategory',
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: products,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
