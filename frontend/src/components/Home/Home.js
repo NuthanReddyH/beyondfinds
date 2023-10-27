@@ -28,12 +28,12 @@ const theme = createTheme({
 
 const Home = () => {
   const popularProducts = [
-    { id: 1, name: "Sweater", price: "$19.99", imageURL: popular1 },
-    { id: 2, name: "Parka", price: "$29.99", imageURL: popular2 },
-    { id: 3, name: "Tops", price: "$39.99", imageURL: popular3 },
-    { id: 4, name: "Knitwear", price: "$49.99", imageURL: popular4 },
-    { id: 5, name: "Sweater", price: "$49.99", imageURL: popular1 },
-    { id: 6, name: "Parka", price: "$49.99", imageURL: popular2 },
+    { id: 1, name: "Sweater", price: "19.99", imageURL: popular1 },
+    { id: 2, name: "Parka", price: "29.99", imageURL: popular2 },
+    { id: 3, name: "Tops", price: "39.99", imageURL: popular3 },
+    { id: 4, name: "Knitwear", price: "49.99", imageURL: popular4 },
+    { id: 5, name: "Sweater", price: "49.99", imageURL: popular1 },
+    { id: 6, name: "Parka", price: "49.99", imageURL: popular2 },
   ];
 
   const sellProducts = [
@@ -85,9 +85,6 @@ const Home = () => {
             ))}
           </Grid>
         </div>
-        {/* <div>
-          <CardGroup />
-        </div> */}
         <div
           style={{ marginTop: "8rem", marginBottom: "8rem", textAlign: "left" }}
         >
@@ -101,7 +98,7 @@ const Home = () => {
           >
             {sellProducts.map((product) => (
               <Grid item xs={12} sm={6} md={4} key={product.id}>
-                <ProductCard product={product} height={"100%"} />
+                <ProductCard product={product} height={"100%"} showDesc={true} />
               </Grid>
             ))}
           </Grid>

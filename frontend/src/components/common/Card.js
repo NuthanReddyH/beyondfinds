@@ -3,8 +3,9 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
+import { formatPrice } from '../../utils';
 
-const ProductCard = ({ product,height }) => {
+const ProductCard = ({ product,height,showDesc }) => {
   return (
     <Card style={{height: height}} className='no-shadow'>
       <a>
@@ -22,7 +23,7 @@ const ProductCard = ({ product,height }) => {
           {product.name}
         </Typography>
         <Typography variant="subtitle1" color="text.secondary">
-          {product.price}
+          {showDesc ? product.price : formatPrice(product.price)}
         </Typography>
       </CardContent>
       </a>

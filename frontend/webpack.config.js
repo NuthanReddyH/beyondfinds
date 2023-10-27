@@ -24,13 +24,17 @@ module.exports = {
         use: ['style-loader', 'css-loader','postcss-loader'],
       },
       {
-        test: /\.(png|jpe?g|jpg|gif|svg)$/i,
+        test: /\.(png|jpe?g|gif|svg)$/i,
         use: [
           {
             loader: 'file-loader',
+            options: {
+              name: '[name].[ext]',
+              outputPath: 'assets/', // or 'assets/img/' or similar, depending on your preference
+            },
           },
         ],
-      },
+      }
     ],
   },
   devServer: {

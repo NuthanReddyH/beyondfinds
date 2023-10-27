@@ -1,24 +1,34 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import companyLogo from "../../assets/logo.png"
+import { IconButton } from "@mui/material";
+import { FavoriteBorder } from "@mui/icons-material";
+import companyLogo from "../../assets/logo.png";
+import { logout } from "../../data/authSlice";
+import AccountMenu from "../common/ProfileToggle";
+import { fetchCategories } from "../../data/productThunk";
 
 const Header = () => {
-  const token = localStorage.getItem("token");
-  console.log({token})
-  const [loggedIn, setLoggedIn] = useState(!!token);
+  const dispatch = useDispatch();
+  const { isAuthenticated, user } = useSelector((state) => state.auth);
+  const { categories } = useSelector((state) => state.products || []);
+  console.log({categories})
+
+  useEffect(() => {
+    dispatch(fetchCategories());
+  }, [dispatch]);
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('userInfo');
-    setLoggedIn(false);
+    localStorage.removeItem("token");
+    localStorage.removeItem("userInfo");
+    dispatch(logout());
   };
-
 
   return (
     <div>
       <nav className="bg-white">
         <div className="container flex items-center justify-between mx-auto py-4 lg:px-16 sm:px-8">
-        <Link to="/" className="flex items-center">
+          <Link to="/" className="flex items-center">
             <img
               src={companyLogo}
               alt="Company Logo"
@@ -73,7 +83,6 @@ const Header = () => {
                   d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
                 />
               </svg>
-              <span className="sr-only">Search</span>
             </button>
             <button
               data-collapse-toggle="navbar-search"
@@ -82,7 +91,6 @@ const Header = () => {
               aria-controls="navbar-search"
               aria-expanded="false"
             >
-              <span className="sr-only">Open main menu</span>
               <svg
                 className="w-5 h-5"
                 aria-hidden="true"
@@ -99,47 +107,38 @@ const Header = () => {
                 />
               </svg>
             </button>
-            {loggedIn ? (
-              <button
-                type="button"
-                onClick={handleLogout}
-                className="text-gray-500 hover:text-gray-700 focus:outline-none"
-              >
-                Logout
-              </button>
+            {isAuthenticated ? (
+              <>
+                <IconButton color="inherit">
+                  <FavoriteBorder />
+                </IconButton>
+                <AccountMenu user={user} handleLogout={handleLogout}/>
+              </>
             ) : (
-              <Link to="/login" className="text-gray-500 hover:text-gray-700 focus:outline-none mt-1">
+              <>
+              <Link
+                to="/login"
+                className="text-gray-500 hover:text-gray-700 focus:outline-none mt-1"
+              >
                 Login
               </Link>
+            </>
             )}
           </div>
         </div>
       </nav>
-      <div className="bottom-nav bg-gray-100 py-4 ">
+      <div className="bottom-nav bg-gray-100 py-4">
         <ul className="flex justify-between container mx-auto lg:px-16 sm:px-8">
-          <li>
-          <Link to="/category" className="hover:text-gray-700 focus:outline-none">
-              Fashion
-            </Link>
-          </li>
-          <li>
-            <a href="/">Electronics</a>
-          </li>
-          <li>
-            <a href="/">Furniture</a>
-          </li>
-          <li>
-            <a href="/">Toys</a>
-          </li>
-          <li>
-            <a href="/">Vehicles</a>
-          </li>
-          <li>
-            <a href="/">Rentals</a>
-          </li>
-          <li>
-            <a href="/">Jewellery & Watches</a>
-          </li>
+          {categories?.map((category) => (
+            <li key={category._id}>
+              <Link
+                to={`/category/${category.name}/${category._id}`}
+                className="hover:text-gray-700 focus:outline-none"
+              >
+                {category.name}
+              </Link>
+            </li>
+          ))}
         </ul>
       </div>
     </div>
