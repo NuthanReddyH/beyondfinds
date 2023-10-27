@@ -2,7 +2,7 @@ import React from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import SimilarCard from "../common/similar-product";
+import SimilarCard from "./SimilarProduct";
 import recent1 from '../../assets/recent1.png';
 import recent2 from '../../assets/recent2.png';
 import recent3 from '../../assets/recent3.png';

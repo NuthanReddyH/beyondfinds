@@ -41,3 +41,36 @@
   color: #ffffff;
   font-size: 44px;
 }
+.subcategories-section {
+    margin-top: 2rem; /* Adds space above the subcategories heading */
+  }
+  
+  .subcategory-item {
+    display: flex;
+    flex-direction: column; /* Stack the image and name vertically */
+    align-items: center; /* Center the content */
+    text-align: center; /* Center the text */
+    height: 100%; /* Full height of the parent */
+    padding: 1rem; /* Space around each item */
+  }
+  .sub-container {
+    justify-content: space-evenly;
+  }
+  .subcategory-item .icon {
+    height: 150px; /* Fixed height for the image container */
+     /* Full width */
+    margin-bottom: 1rem; /* Space between image and text */
+  }
+  
+  .subcategory-item img {
+    max-height: 100%; /* Ensures images fill the container height */
+    max-width: 100%; /* Ensures images fill the container width */
+    object-fit: cover; /* Ensures images cover the area without distortion */
+  }
+  
+  /* Apply no-shadow styles on hover */
+  .subcategory-item:hover {
+    box-shadow: 0px 1px 6px rgba(1, 1, 6, 0.08);
+    border: 1px solid #F7F9FA;
+  }
+  

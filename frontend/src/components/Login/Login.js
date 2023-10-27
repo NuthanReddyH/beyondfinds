@@ -15,7 +15,8 @@ import {
 import { Visibility, VisibilityOff, Close } from "@mui/icons-material";
 import loginImg from "../../assets/login.png";
 import { Link, useNavigate } from "react-router-dom";
-import { loginUser } from "../../api/auth";
+import { useDispatch } from "react-redux";
+import { loginThunk } from "../../data/authSlice";
 
 const theme = createTheme({
   typography: {
@@ -33,6 +34,7 @@ const Login = () => {
     username: "",
     password: "",
   });
+  const dispatch = useDispatch();
 
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
@@ -77,11 +79,15 @@ const Login = () => {
       return;
     }
 
-    try {
-      await loginUser(formData.username, formData.password);
+    const result = await dispatch(
+      loginThunk({ username: formData.username, password: formData.password })
+    );
+    console.log({ result });
+    if (result?.error) {
+      const errorMessage = result?.payload;
+      handleSnackbarOpen(errorMessage);
+    } else {
       navigate("/");
-    } catch (error) {
-      handleSnackbarOpen("Login failed. Please check your credentials.");
     }
   };
 
@@ -147,7 +153,7 @@ const Login = () => {
             >
               <Link to="#">Forgot password?</Link>
             </Typography>
-      
+
             <Button
               variant="contained"
               color="primary"

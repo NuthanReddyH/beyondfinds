@@ -1,10 +1,12 @@
 import "tailwindcss/tailwind.css";
-import React, { lazy, Suspense } from "react"; // Import lazy and Suspense
+import React, { lazy, Suspense ,useEffect} from "react"; // Import lazy and Suspense
 import "./App.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Loader from "./components/Loader/Loader";
 import ErrorPage from "./components/ErrorPage/Error";
-
+import { useDispatch } from 'react-redux'; // necessary to dispatch the rehydrate action
+import { rehydrateAuthState } from './data/authSlice';
+import Account from "./components/Account/Account";
 const Home = lazy(() => import("./components/Home/Home"));
 const Footer = lazy(() => import("./components/Footer/Footer"));
 const Header = lazy(() => import("./components/Header/Header"));
@@ -14,6 +16,13 @@ const IndividualCategory = lazy(() => import("./components/IndividualCategory/In
 
 
 function App() {
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    // Rehydrate the authentication state as soon as app loads
+    dispatch(rehydrateAuthState());
+  }, [dispatch]); // only run once when the component is mounted
   return (
     <div className="App">
       <Router>
@@ -24,8 +33,9 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
+              <Route path="/myAccount" element={<Account />} />
+              <Route path="/category/:categoryName/:categoryId" element={<IndividualCategory />} />
               <Route path="*" element={<ErrorPage />} />
-              <Route path="/category" element={<IndividualCategory />} />
             </Routes>
           </main>
           <Footer />

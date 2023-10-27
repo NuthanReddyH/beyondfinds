@@ -91,6 +91,8 @@ const userSchema = new Schema(
       lastName: String,
       avatar: String,
       bio: String,
+      phone: String,
+      dob: String
     },
   },
   {
