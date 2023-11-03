@@ -82,7 +82,6 @@ const Login = () => {
     const result = await dispatch(
       loginThunk({ username: formData.username, password: formData.password })
     );
-    console.log({ result });
     if (result?.error) {
       const errorMessage = result?.payload;
       handleSnackbarOpen(errorMessage);

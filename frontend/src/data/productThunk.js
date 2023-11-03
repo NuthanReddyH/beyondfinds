@@ -1,7 +1,7 @@
 // productThunks.js
 
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { getSubcategoriesByCategory, getProductsByCategory,getCategories,getProductsBySubcategory } from '../api/productService'; // Import your service methods
+import { getSubcategoriesByCategory, getProductsByCategory,getCategories,getProductsBySubcategory, getProducts } from '../api/productService'; // Import your service methods
 
 export const fetchSubcategories = createAsyncThunk(
   'products/fetchSubcategories',
@@ -47,6 +47,18 @@ export const fetchProductsBySubcategory = createAsyncThunk(
       return response;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.error || 'Could not fetch products by subcategory');
+    }
+  }
+);
+
+export const fetchAllProducts = createAsyncThunk(
+  'products/fetchAllProducts',
+  async (_, thunkAPI) => {
+    try {
+      const response = await getProducts(); // Use the new function to fetch all products
+      return response; // response is the products array
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.error || 'Could not fetch all products');
     }
   }
 );

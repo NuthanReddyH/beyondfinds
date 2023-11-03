@@ -12,7 +12,6 @@ const Header = () => {
   const dispatch = useDispatch();
   const { isAuthenticated, user } = useSelector((state) => state.auth);
   const { categories } = useSelector((state) => state.products || []);
-  console.log({categories})
 
   useEffect(() => {
     dispatch(fetchCategories());
@@ -112,28 +111,36 @@ const Header = () => {
                 <IconButton color="inherit">
                   <FavoriteBorder />
                 </IconButton>
-                <AccountMenu user={user} handleLogout={handleLogout}/>
+                <AccountMenu user={user} handleLogout={handleLogout} />
               </>
             ) : (
               <>
-              <Link
-                to="/login"
-                className="text-gray-500 hover:text-gray-700 focus:outline-none mt-1"
-              >
-                Login
-              </Link>
-            </>
+                <Link
+                  to="/login"
+                  className="text-gray-500 hover:text-gray-700 focus:outline-none mt-1"
+                >
+                  Login
+                </Link>
+              </>
             )}
           </div>
         </div>
       </nav>
       <div className="bottom-nav bg-gray-100 py-4">
         <ul className="flex justify-between container mx-auto lg:px-16 sm:px-8">
+          <li>
+            <Link
+              to={`/products`}
+              className="hover:text-gray-700 focus:outline-none"
+            >
+              All
+            </Link>
+          </li>
           {categories?.map((category) => (
             <li key={category._id}>
               <Link
                 to={`/category/${category.name}/${category._id}`}
-                className="hover:text-gray-700 focus:outline-none"
+                className="hover:text-gray-700 focus:outline-none ml-2"
               >
                 {category.name}
               </Link>

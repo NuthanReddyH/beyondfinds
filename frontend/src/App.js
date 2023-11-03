@@ -7,6 +7,8 @@ import ErrorPage from "./components/ErrorPage/Error";
 import { useDispatch } from 'react-redux'; // necessary to dispatch the rehydrate action
 import { rehydrateAuthState } from './data/authSlice';
 import Account from "./components/Account/Account";
+import  ProductsPage  from "./components/Products/ProductsPage";
+import ProductDetails from "./components/Products/ProductDetails";
 const Home = lazy(() => import("./components/Home/Home"));
 const Footer = lazy(() => import("./components/Footer/Footer"));
 const Header = lazy(() => import("./components/Header/Header"));
@@ -34,7 +36,9 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/myAccount" element={<Account />} />
+              <Route path="/products" element={<ProductsPage />} />
               <Route path="/category/:categoryName/:categoryId" element={<IndividualCategory />} />
+              <Route path="/product/:productId" element={<ProductDetails />} />
               <Route path="*" element={<ErrorPage />} />
             </Routes>
           </main>

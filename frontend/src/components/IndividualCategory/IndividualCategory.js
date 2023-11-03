@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchSubcategories,
@@ -31,7 +31,6 @@ const IndividualCategory = () => {
   const { subcategories, products, loading, error } = useSelector(
     (state) => state.products
   );
-  console.log({ products });
 
   const productsPerPage = 18;
 
@@ -79,7 +78,6 @@ const IndividualCategory = () => {
     }
   }, [products, sortValue]);
 
-  console.log({ shuffledProducts });
 
   const updatedProducts = shuffledProducts.map((p) => {
     return {
@@ -103,7 +101,6 @@ const IndividualCategory = () => {
   if (error) return <ErrorPage />;
 
   const handleSubcategoryClick = (subcategoryId) => {
-    console.log({subcategories})
     dispatch(fetchProductsBySubcategory(subcategoryId));
   };
   
@@ -159,13 +156,13 @@ const IndividualCategory = () => {
       </div>
 
       <div className="subcategories-section">
-        <Typography
+       {subcategories?.length > 0 && <Typography
           variant="h4"
           component="h2"
           style={{ marginBottom: "16px" }}
         >
           Subcategories
-        </Typography>
+        </Typography>}
         <Grid container spacing={2} justifyContent="space-evenly">
           {renderSubcategories()}
         </Grid>
@@ -209,12 +206,14 @@ const IndividualCategory = () => {
         <Grid container spacing={2}>
           {currentProducts?.map((product) => (
             <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={product.id}>
+              <Link to={`/product/${product.id}`}>
               <ProductCard
                 product={{
                   ...product,
                   imageURL: getImage(product.imageURL),
                 }}
               />
+              </Link>
             </Grid>
           ))}
         </Grid>

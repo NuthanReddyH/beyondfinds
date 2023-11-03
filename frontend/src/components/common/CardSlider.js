@@ -65,7 +65,6 @@ export const CardSlider = ({ products }) => {
     ),
   };
 
-  console.log({ products });
 
   return (
     <div className="content">
