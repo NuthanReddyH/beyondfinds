@@ -1,4 +1,14 @@
-import api from './endpoint';  
+import api from './endpoint';
+
+export const getProducts = async () => {
+  try {
+    const response = await api.get('/categories/products');
+    return response.data.data;
+  } catch (error) {
+    console.error('There was an error fetching the products!', error);
+    throw error;
+  }
+};
 
 export const getProductsByCategory = async (categoryId) => {
   try {
@@ -23,7 +33,6 @@ export const getSubcategoriesByCategory = async (categoryId) => {
 export const getCategories = async () => {
   try {
     const response = await api.get('/categories/allcategories');
-    console.log({response})
     return response.data.data;
   } catch (error) {
     console.error('There was an error fetching the categories!', error);
