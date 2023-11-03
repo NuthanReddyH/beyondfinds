@@ -14,6 +14,18 @@ export const loginThunk = createAsyncThunk(
   }
 );
 
+export const updateUserThunk = createAsyncThunk(
+  'auth/updateUser',
+  async (userData, thunkAPI) => {
+    try {
+      const response = await updateUser(userData); // Assuming updateUser is similar to loginUser in usage
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.error || 'Update failed');
+    }
+  }
+);
+
 export const authSlice = createSlice({
   name: 'auth',
   initialState: {
@@ -53,6 +65,19 @@ export const authSlice = createSlice({
     [loginThunk.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload || 'Login failed';
+    },
+    [updateUserThunk.pending]: (state) => {
+      state.loading = true;
+      state.error = null;
+    },
+    [updateUserThunk.fulfilled]: (state, action) => {
+      state.user = action.payload;
+      state.loading = false;
+      state.error = null;
+    },
+    [updateUserThunk.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload || 'Update failed';
     },
   },
 });

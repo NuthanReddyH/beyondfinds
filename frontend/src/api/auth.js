@@ -26,3 +26,21 @@ export const loginUser = async (username, password) => {
     throw error;
   }
 };
+
+export const updateUser = async (userData) => {  // Added updateUser method
+  try {
+    console.log({userData})
+    const response = await api.put('/auth/update', userData);
+    if (response.data) {
+      // Assuming the response contains the updated user data
+      localStorage.setItem('userInfo', JSON.stringify(response.data));
+      return response.data;
+    } else {
+      console.log("error")
+      throw new Error('User update failed');
+    }
+  } catch (error) {
+    console.log({ error });
+    throw error;
+  }
+};

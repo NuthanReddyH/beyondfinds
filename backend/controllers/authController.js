@@ -64,7 +64,46 @@ const register = async (req, res) => {
   }
 };
 
+const updateUser = async (req, res) => {
+  const { username, newPassword } = req.body;  // Extract the new password if provided
+  const updatedFields = req.body;
+  
+  try {
+    const user = await User.findOne({ username });
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found." });
+    }
+
+    // If there's a newPassword in the request, hash it
+    if (newPassword) {
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+      user.password = hashedPassword;
+    }
+
+    // Prevent email and username from being updated directly using this method
+    // This is to prevent security and duplication issues
+    delete updatedFields.email;
+    delete updatedFields.username;
+    delete updatedFields.newPassword;  // Remove newPassword from updatedFields
+
+    for (let field in updatedFields) {
+      user[field] = updatedFields[field];
+    }
+
+    await user.save();
+
+    return res.status(200).json({ message: "User updated successfully.", user });
+  } catch (error) {
+    console.log({ error });
+    return res.status(500).json({ error: "Server error." });
+  }
+};
+
+
+
 module.exports = {
     login,
     register,
+    updateUser
 };

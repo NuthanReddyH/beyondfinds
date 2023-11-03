@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 import { IconButton } from "@mui/material";
 import { FavoriteBorder } from "@mui/icons-material";
 import companyLogo from "../../assets/logo.png";
@@ -12,6 +12,7 @@ const Header = () => {
   const dispatch = useDispatch();
   const { isAuthenticated, user } = useSelector((state) => state.auth);
   const { categories } = useSelector((state) => state.products || []);
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(fetchCategories());
@@ -21,6 +22,7 @@ const Header = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("userInfo");
     dispatch(logout());
+    navigate("/");
   };
 
   return (
