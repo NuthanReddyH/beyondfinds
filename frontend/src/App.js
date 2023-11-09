@@ -16,7 +16,9 @@ const Login = lazy(() => import("./components/login/Login"));
 const Register = lazy(() => import("./components/Register/Register"));
 const IndividualCategory = lazy(() => import("./components/IndividualCategory/IndividualCategory"));
 
-
+const Admin = lazy(() => import("./components/Admin Header/Header"));
+const Dashboard = lazy(() => import("./components/Admin User Dashboard/Dashboard"));
+const Listing = lazy(() => import("./components/Admin Listing Dashboard/Dashboard"));
 function App() {
 
   const dispatch = useDispatch();
@@ -40,6 +42,9 @@ function App() {
               <Route path="/category/:categoryName/:categoryId" element={<IndividualCategory />} />
               <Route path="/product/:productId" element={<ProductDetails />} />
               <Route path="*" element={<ErrorPage />} />
+              <Route path="/admin" element={<Admin/>}/>
+              <Route path="/dashboard" element={<Dashboard/>}/>
+              <Route path="/listing" element={<Listing/>}/>
             </Routes>
           </main>
           <Footer />

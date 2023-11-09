@@ -1,0 +1,10 @@
+.header{
+    background-color: #080505;
+}
+
+ul{
+    display: flex;
+}
+li{
+    padding-right: 25px;
+}
