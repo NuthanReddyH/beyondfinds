@@ -30,10 +30,17 @@ export const loginUser = async (username, password) => {
 export const updateUser = async (userData) => {  // Added updateUser method
   try {
     console.log({userData})
-    const response = await api.put('/auth/update', userData);
+    //const response = await api.put('/auth/update', userData);
+    const response = await api.put('/auth/update', userData, {
+      headers: {
+        'Content-Type': 'multipart/form-data', // Set correct content type for file upload
+      },
+    });
+    
     if (response.data) {
       // Assuming the response contains the updated user data
-      localStorage.setItem('userInfo', JSON.stringify(response.data));
+      console.log({response})
+      localStorage.setItem('userInfo', JSON.stringify(response?.data?.user));
       return response.data;
     } else {
       console.log("error")

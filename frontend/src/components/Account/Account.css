@@ -26,10 +26,8 @@
     align-items: center;
 }
 
-button{
-    margin-top: 20px !important;
-}
 
 .btn-save {
+    margin-top: 20px !important;
     background-color: #23B0BE !important;
 }

@@ -1,12 +1,13 @@
 // productSlice.js
 
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchSubcategories, fetchProductsByCategory, fetchCategories,fetchProductsBySubcategory, fetchAllProducts } from './productThunk';
+import { fetchSubcategories, fetchProductsByCategory, fetchCategories,fetchProductsBySubcategory, fetchAllProducts, addProduct, fetchProductsByUser } from './productThunk';
 
 const initialState = {
   categories: [], // New state for categories
   subcategories: [],
   products: [],
+  userProducts:[],
   loading: false,
   error: null,
 };
@@ -80,6 +81,30 @@ const productSlice = createSlice({
       state.loading = false;
     },
     [fetchAllProducts.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    [addProduct.pending]: (state) => {
+      state.loading = true;
+      state.error = null;
+    },
+    [addProduct.fulfilled]: (state, action) => {
+      state.products.push(action.payload.data); // Add the new product to the state
+      state.loading = false;
+    },
+    [addProduct.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    [fetchProductsByUser.pending]: (state) => {
+      state.loading = true;
+      state.error = null;
+    },
+    [fetchProductsByUser.fulfilled]: (state, action) => {
+      state.userProducts = action.payload;
+      state.loading = false;
+    },
+    [fetchProductsByUser.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload;
     },
