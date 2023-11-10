@@ -123,6 +123,7 @@ function Profile() {
             <Button
               variant="outlined"
               component="span"
+              className='btn-upload'
               startIcon={<PhotoCameraIcon />}
             >
               Upload

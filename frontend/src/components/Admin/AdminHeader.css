@@ -1,10 +1,11 @@
-.header{
+.admin-header{
     background-color: #080505;
 }
 
-ul{
+.admin-nav {
     display: flex;
 }
+
 li{
     padding-right: 25px;
 }

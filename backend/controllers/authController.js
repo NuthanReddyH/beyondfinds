@@ -110,11 +110,60 @@ const updateUser = async (req, res) => {
   }
 };
 
+const getUsers = async (req, res) => {
+  try {
+    const users = await User.find({}); // Fetch all users from the database
+    // Optionally, select only the fields you want to send to the client for privacy reasons
+    const userDtos = users.map(user => ({
+      id: user._id,
+      username: user.username,
+      email: user.email
+      // Do not send back sensitive data like passwords!
+    }));
+    return res.status(200).json(userDtos);
+  } catch (error) {
+    console.log({ error });
+    return res.status(500).json({ error: "Server error while retrieving users." });
+  }
+};
+
+const getUsersCount = async (req, res) => {
+  try {
+    const count = await User.countDocuments(); // This will count all documents in the collection
+    return res.status(200).json({ count });
+  } catch (error) {
+    console.log({ error });
+    return res.status(500).json({ error: "Server error while retrieving users count." });
+  }
+};
+
+
+const deleteUser = async (req, res) => {
+  const { id } = req.params; 
+
+  try {
+    const user = await User.findById(id);
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found." });
+    }
+
+    await User.findByIdAndDelete(id);
+    return res.status(200).json({ message: "User deleted successfully." });
+  } catch (error) {
+    console.log({ error });
+    return res.status(500).json({ error: "Server error while deleting the user." });
+  }
+};
+
 
 
 
 module.exports = {
     login,
     register,
-    updateUser
+    updateUser,
+    getUsers,
+    deleteUser,
+    getUsersCount
 };

@@ -16,7 +16,12 @@ export const loginUser = async (username, password) => {
     if (response.data.token) {
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('userInfo', JSON.stringify(response.data.user));
-      return response.data.user;
+      const isAdmin = response?.data?.user?.username === 'admin' ? 1 : 0;
+      localStorage.setItem('isAdmin',isAdmin)
+      return {
+        user: response.data.user,
+        isAdmin: isAdmin
+      }
     } else {
       console.log("error")
       throw new Error('Token not found in the response');
@@ -48,6 +53,37 @@ export const updateUser = async (userData) => {  // Added updateUser method
     }
   } catch (error) {
     console.log({ error });
+    throw error;
+  }
+};
+
+export const getUsers = async () => {
+  try {
+    const response = await api.get('/auth/users'); // Adjust the endpoint as necessary
+    return response.data;
+  } catch (error) {
+    console.error({ error });
+    throw error;
+  }
+};
+
+export const getUsersCount = async () => {
+  try {
+    const response = await api.get('/auth/users/count'); 
+    return response.data.count;
+  } catch (error) {
+    console.error({ error });
+    throw error;
+  }
+};
+
+export const deleteUser = async (userId) => {
+  try {
+    const response = await api.delete(`/auth/user/${userId}`); // Adjust the endpoint as necessary
+    // No need to update localStorage for deleting other users
+    return response.data; // This should contain a success message
+  } catch (error) {
+    console.error({ error });
     throw error;
   }
 };

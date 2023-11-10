@@ -72,7 +72,7 @@ export default function AccountMenu({ user, handleLogout }) {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        <MenuItem onClick={handleClose}>
+        <MenuItem sx={{ display: 'flex', flexDirection: 'column' }} onClick={handleClose}>
           <Link to="/myAccount">Profile</Link>
         </MenuItem>
         <MenuItem onClick={handleClose}> <Link to="/addListing">Add Listing</Link></MenuItem>

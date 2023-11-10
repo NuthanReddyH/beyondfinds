@@ -1,16 +1,20 @@
 import "tailwindcss/tailwind.css";
-import React, { lazy, Suspense ,useEffect} from "react"; // Import lazy and Suspense
+import React, { lazy, Suspense, useEffect } from "react";
 import "./App.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Loader from "./components/Loader/Loader";
 import ErrorPage from "./components/ErrorPage/Error";
-import { useDispatch } from 'react-redux'; // necessary to dispatch the rehydrate action
+import { useDispatch, useSelector } from 'react-redux';
 import { rehydrateAuthState } from './data/authSlice';
 import Account from "./components/Account/Account";
-import  ProductsPage  from "./components/Products/ProductsPage";
+import ProductsPage from "./components/Products/ProductsPage";
 import ProductDetails from "./components/Products/ProductDetails";
 import AddListing from "./components/Listings/AddListing";
 import MyListings from "./components/Listings/MyListing";
+import AdminHeader from "./components/Admin/AdminHeader";
+import UserDashboard from "./components/Admin/UserDashboard";
+
+// Lazy-loaded components
 const Home = lazy(() => import("./components/Home/Home"));
 const Footer = lazy(() => import("./components/Footer/Footer"));
 const Header = lazy(() => import("./components/Header/Header"));
@@ -18,22 +22,23 @@ const Login = lazy(() => import("./components/login/Login"));
 const Register = lazy(() => import("./components/Register/Register"));
 const IndividualCategory = lazy(() => import("./components/IndividualCategory/IndividualCategory"));
 
-const Admin = lazy(() => import("./components/Admin Header/Header"));
-const Dashboard = lazy(() => import("./components/Admin User Dashboard/Dashboard"));
-const Listing = lazy(() => import("./components/Admin Listing Dashboard/Dashboard"));
+const Dashboard = lazy(() => import("./components/Admin/Dashboard"));
+
 function App() {
 
   const dispatch = useDispatch();
-
+  //const isAdmin = localStorage.getItem('isAdmin');
+  const { isAdmin } = useSelector((state) => state.auth);
+  
   useEffect(() => {
-    // Rehydrate the authentication state as soon as app loads
     dispatch(rehydrateAuthState());
-  }, [dispatch]); // only run once when the component is mounted
+  }, [dispatch]);
+
   return (
     <div className="App">
       <Router>
         <Suspense fallback={<Loader />}>
-          <Header />
+          {!!isAdmin ? <AdminHeader /> : <Header />}
           <main className="container mx-auto lg:px-16 sm:px-8">
             <Routes>
               <Route path="/" element={<Home />} />
@@ -45,10 +50,12 @@ function App() {
               <Route path="/product/:productId" element={<ProductDetails />} />
               <Route path="/addListing" element={<AddListing />} />
               <Route path="/myListings" element={<MyListings />} />
+              {/* Admin Routes */}
+              <Route path="/admin" element={<Dashboard />} />
+              <Route path="/users" element={<UserDashboard />} />
+             
+              {/* Catch-all route for 404 errors */}
               <Route path="*" element={<ErrorPage />} />
-              <Route path="/admin" element={<Admin/>}/>
-              <Route path="/dashboard" element={<Dashboard/>}/>
-              <Route path="/listing" element={<Listing/>}/>
             </Routes>
           </main>
           <Footer />
@@ -57,6 +64,5 @@ function App() {
     </div>
   );
 }
-
 
 export default App;
