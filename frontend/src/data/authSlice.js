@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { loginUser, updateUser } from '../api/auth';
+import { deleteUser, getUsers, getUsersCount, loginUser, updateUser } from '../api/auth';
 import axios from 'axios';
 
 export const loginThunk = createAsyncThunk(
@@ -29,18 +29,58 @@ export const updateUserThunk = createAsyncThunk(
   }
 );
 
+export const getUsersThunk = createAsyncThunk(
+  'auth/getUsers',
+  async (_, thunkAPI) => {
+    try {
+      const response = await getUsers();
+      return response;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.error || 'Could not fetch users');
+    }
+  }
+);
+
+export const deleteUserThunk = createAsyncThunk(
+  'auth/deleteUser',
+  async (userId, thunkAPI) => {
+    try {
+      const response = await deleteUser(userId);
+      return response; // This should contain the ID of the deleted user or a success message
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.error || 'Could not delete user');
+    }
+  }
+);
+
+export const getUsersCountThunk = createAsyncThunk(
+  'auth/getUsersCount',
+  async (_, thunkAPI) => {
+    try {
+      const response = await getUsersCount(); // Replace with your actual API endpoint for user count
+      return response; // Assuming the API returns an object with a count property
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.error || 'Could not fetch users count');
+    }
+  }
+);
+
 export const authSlice = createSlice({
   name: 'auth',
   initialState: {
     user: null,
+    users: [],
     isAuthenticated: false,
+    usersCount: 0,
     loading: false,
     error: null,
+    isAdmin: false
   },
   reducers: {
     logout(state) {
       state.user = null;
       state.isAuthenticated = false;
+      state.isAdmin = false;
     },
     rehydrateAuthState(state) {
       const token = localStorage.getItem('token');
@@ -60,7 +100,9 @@ export const authSlice = createSlice({
       state.error = null;
     },
     [loginThunk.fulfilled]: (state, action) => {
-      state.user = action.payload;
+      console.log({action})
+      state.user = action.payload.user;
+      state.isAdmin = action.payload.isAdmin
       state.isAuthenticated = true;
       state.loading = false;
       state.error = null;
@@ -82,6 +124,46 @@ export const authSlice = createSlice({
     [updateUserThunk.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload || 'Update failed';
+    },
+    [getUsersThunk.pending]: (state) => {
+      state.loading = true;
+      state.error = null;
+    },
+    [getUsersThunk.fulfilled]: (state, action) => {
+      state.users = action.payload;
+      state.loading = false;
+      state.error = null;
+    },
+    [getUsersThunk.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload || 'Could not fetch users';
+    },
+    [deleteUserThunk.pending]: (state) => {
+      state.loading = true;
+      state.error = null;
+    },
+    [deleteUserThunk.fulfilled]: (state, action) => {
+      // Remove the deleted user from the state
+      state.users = state.users.filter((user) => user.id !== action.payload.id);
+      state.loading = false;
+      state.error = null;
+    },
+    [deleteUserThunk.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload || 'Could not delete user';
+    },
+    [getUsersCountThunk.pending]: (state) => {
+      state.loading = true;
+      state.error = null;
+    },
+    [getUsersCountThunk.fulfilled]: (state, action) => {
+      state.usersCount = action.payload;
+      state.loading = false;
+      state.error = null;
+    },
+    [getUsersCountThunk.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload || 'Could not fetch users count';
     },
   },
 });

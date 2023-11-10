@@ -86,7 +86,14 @@ const Login = () => {
       const errorMessage = result?.payload;
       handleSnackbarOpen(errorMessage);
     } else {
-      navigate("/");
+      const isAdmin = parseInt(localStorage.getItem('isAdmin'));
+      console.log({isAdmin})
+      if(!!isAdmin) {
+        navigate("/admin")
+      } else {
+        navigate("/");
+      }
+      
     }
   };
 

@@ -1,0 +1,11 @@
+.admin-header{
+    background-color: #080505;
+}
+
+.admin-nav {
+    display: flex;
+}
+
+li{
+    padding-right: 25px;
+}

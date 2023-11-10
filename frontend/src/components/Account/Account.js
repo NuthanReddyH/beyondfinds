@@ -102,6 +102,7 @@ function Profile() {
 
       <TabPanel value={selectedTab} index={0} className="tabpanel">
         <Box sx={{ p: 3 }}>
+          <div className='flex items-center'>
           <Avatar
             alt="Profile Picture"
             src={
@@ -122,11 +123,13 @@ function Profile() {
             <Button
               variant="outlined"
               component="span"
+              className='btn-upload'
               startIcon={<PhotoCameraIcon />}
             >
               Upload
             </Button>
           </label>
+          </div>
           <TextField
             fullWidth
             margin="normal"
@@ -182,7 +185,33 @@ function Profile() {
         />
       </Snackbar>
       </TabPanel>
-
+      <TabPanel value={selectedTab} index={1} className="tabpanel"style={{ width:'50%'}}>
+        <TextField
+              fullWidth
+              margin="normal"
+              label="Current Password"            
+              
+            />
+            <TextField
+              fullWidth
+              margin="normal"
+              label="New Password"            
+              
+            />
+            <TextField
+              fullWidth
+              margin="normal"
+              label="Re-Type Password"            
+              
+            />
+            <Button
+              variant="contained"
+              className='btn-save'
+              onClick={handleSaveChanges}
+            >
+              Save Changes
+            </Button>
+      </TabPanel>
       {/* ... other TabPanels for Change Password, My Listing, Manage Membership ... */}
     </Box>
   );

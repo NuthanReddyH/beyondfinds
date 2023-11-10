@@ -54,6 +54,9 @@ main {
   display: none;
 }
 
+.css-1ygcj2i-MuiTableCell-root{
+  font-weight: 700 !important;
+}
 
 
 @media (prefers-reduced-motion: no-preference) {
