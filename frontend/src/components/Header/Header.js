@@ -14,7 +14,6 @@ const Header = () => {
   const { isAuthenticated, user } = useSelector((state) => state.auth);
   const { categories } = useSelector((state) => state.products || []);
   const navigate = useNavigate();
-
   useEffect(() => {
     dispatch(fetchCategories());
   }, [dispatch]);

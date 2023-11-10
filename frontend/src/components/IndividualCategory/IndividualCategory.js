@@ -17,7 +17,7 @@ import {
 } from "@mui/material";
 import bgImage from "../../assets/bg2.png";
 import "./IndividualCategory.css";
-import { getImage } from "../../utils";
+import { getImageData } from "../../utils";
 import Loader from "../Loader/Loader";
 import ErrorPage from "../ErrorPage/Error";
 
@@ -117,7 +117,7 @@ const IndividualCategory = () => {
       >
         <div className="subcategory-item" onClick={() => handleSubcategoryClick(sub._id)}>
           <div className="icon">
-            <img src={getImage(sub.imageUrl)} alt={sub.name} />
+            <img src={getImageData(sub.imageUrl)} alt={sub.name} />
           </div>
           <Typography variant="h6">{sub.name}</Typography>
         </div>
@@ -210,7 +210,7 @@ const IndividualCategory = () => {
               <ProductCard
                 product={{
                   ...product,
-                  imageURL: getImage(product.imageURL),
+                  imageURL: getImageData(product.imageURL),
                 }}
               />
               </Link>

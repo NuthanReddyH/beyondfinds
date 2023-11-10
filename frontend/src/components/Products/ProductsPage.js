@@ -13,7 +13,7 @@ import ProductCard from "../common/Card";
 import bgImage from "../../assets/bg2.png";
 import Loader from "../Loader/Loader";
 import ErrorPage from "../ErrorPage/Error";
-import { getImage } from "../../utils";
+import {  getImageData } from "../../utils";
 import '../IndividualCategory/IndividualCategory.css'
 import { Link } from "react-router-dom";
 
@@ -109,6 +109,8 @@ const ProductsPage = () => {
     setShuffledProducts(sortedProducts);
   };
 
+  
+
   return (
     <div>
       <div className="banner-img">
@@ -157,7 +159,7 @@ const ProductsPage = () => {
               <ProductCard
                 product={{
                   ...product,
-                  imageURL: getImage(product.imageURL),
+                  imageURL: getImageData(product?.imageURL),
                 }}
               /></Link>
             </Grid>

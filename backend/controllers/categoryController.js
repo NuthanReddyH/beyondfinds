@@ -106,3 +106,69 @@ exports.getProducts = async (req, res) => {
   }
 };
 
+exports.addProduct = async (req, res) => {
+  try {
+    // Assuming the image is uploaded and the filename is available in req.file.path
+    const { title, price, description, sellerInformation, location, category, subcategory } = req.body;
+    const productImage = req.file.path; // The path to the uploaded image file
+
+    // Create a new product instance
+    const newProduct = new Product({
+      title,
+      price,
+      description,
+      sellerInformation: { name: sellerInformation },
+      location,
+      category,
+      subcategory,
+      productImage
+    });
+
+    // Save the product to the database
+    const savedProduct = await newProduct.save();
+
+    res.status(200).json({
+      success: true,
+      data: savedProduct,
+      message: "Product added successfully."
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
+};
+
+exports.getProductsByUser = async (req, res) => {
+  try {
+    // Extract the seller's name from the request parameters or query
+    // If you pass it as a URL parameter, use req.params.sellerName
+    // If you pass it as a query string, use req.query.sellerName
+    const sellerName = req.query.sellerName;
+
+    // Find all products where the sellerInformation.name matches the sellerName
+    const products = await Product.find({ 'sellerInformation.name': sellerName })
+      .populate('category')
+      .populate('subcategory');
+
+    if (products.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: 'No products found for this seller',
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: products,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+
