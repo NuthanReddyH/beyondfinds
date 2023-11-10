@@ -50,3 +50,29 @@ export const getProductsBySubcategory = async (subcategoryId) => {
   }
 };
 
+export const addProduct = async (formData) => {
+  try {
+    const response = await api.post('/categories/addProduct', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('There was an error adding the product!', error);
+    throw error;
+  }
+};
+
+export const getProductsByUser = async (sellerName) => {
+  try {
+    const response = await api.get(`/categories/products/seller?sellerName=${sellerName}`);
+    return response.data.data;
+  } catch (error) {
+    console.error('There was an error fetching the products by user!', error);
+    throw error;
+  }
+};
+
+
+

@@ -10,6 +10,7 @@ import Tooltip from "@mui/material/Tooltip";
 import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
 import { Link } from "react-router-dom";
+import { getImageUrl } from "../../utils";
 
 export default function AccountMenu({ user, handleLogout }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -32,7 +33,7 @@ export default function AccountMenu({ user, handleLogout }) {
             aria-haspopup="true"
             aria-expanded={open ? "true" : undefined}
           >
-            <Avatar src={user?.avatar} alt={user?.name} />
+            <Avatar src={user?.profile?.avatar ? getImageUrl(user?.profile?.avatar) : ''} alt={user?.username} />
           </IconButton>
         </Tooltip>
       </Box>
@@ -74,7 +75,8 @@ export default function AccountMenu({ user, handleLogout }) {
         <MenuItem onClick={handleClose}>
           <Link to="/myAccount">Profile</Link>
         </MenuItem>
-        <MenuItem onClick={handleClose}>My Listings</MenuItem>
+        <MenuItem onClick={handleClose}> <Link to="/addListing">Add Listing</Link></MenuItem>
+        <MenuItem onClick={handleClose}><Link to="/myListings">My Listings</Link></MenuItem>
         <Divider />
         <MenuItem onClick={handleClose}>
           <ListItemIcon>

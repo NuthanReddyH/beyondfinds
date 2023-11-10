@@ -9,6 +9,8 @@ import { rehydrateAuthState } from './data/authSlice';
 import Account from "./components/Account/Account";
 import  ProductsPage  from "./components/Products/ProductsPage";
 import ProductDetails from "./components/Products/ProductDetails";
+import AddListing from "./components/Listings/AddListing";
+import MyListings from "./components/Listings/MyListing";
 const Home = lazy(() => import("./components/Home/Home"));
 const Footer = lazy(() => import("./components/Footer/Footer"));
 const Header = lazy(() => import("./components/Header/Header"));
@@ -39,6 +41,8 @@ function App() {
               <Route path="/products" element={<ProductsPage />} />
               <Route path="/category/:categoryName/:categoryId" element={<IndividualCategory />} />
               <Route path="/product/:productId" element={<ProductDetails />} />
+              <Route path="/addListing" element={<AddListing />} />
+              <Route path="/myListings" element={<MyListings />} />
               <Route path="*" element={<ErrorPage />} />
             </Routes>
           </main>

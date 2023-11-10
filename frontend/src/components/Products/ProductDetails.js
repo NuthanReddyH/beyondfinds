@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { getImage } from "../../utils";
+import {  getImageData } from "../../utils";
 
 const productStyles = {
   breadcrumbs: {
@@ -133,7 +133,7 @@ function ProductDetails() {
         <div style={productStyles.imageContainer}>
           <img
             style={productStyles.productImage}
-            src={getImage(product.productImage)}
+            src={getImageData(product.productImage)}
             alt={product.title}
           />
         </div>

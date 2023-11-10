@@ -65,9 +65,9 @@ const register = async (req, res) => {
 };
 
 const updateUser = async (req, res) => {
-  const { username, newPassword } = req.body;  // Extract the new password if provided
+  const { username } = req.body; // Extract the username
   const updatedFields = req.body;
-  
+
   try {
     const user = await User.findOne({ username });
 
@@ -75,30 +75,41 @@ const updateUser = async (req, res) => {
       return res.status(404).json({ error: "User not found." });
     }
 
-    // If there's a newPassword in the request, hash it
-    if (newPassword) {
-      const hashedPassword = await bcrypt.hash(newPassword, 10);
-      user.password = hashedPassword;
+    // Check if a file is uploaded and update the avatar field
+    if (req.file) {
+      const avatarPath = req.file.path;
+      updatedFields.profile = updatedFields.profile || {}; // Ensure the profile object exists
+      updatedFields.profile.avatar = avatarPath; // Update the avatar path
     }
 
-    // Prevent email and username from being updated directly using this method
-    // This is to prevent security and duplication issues
-    delete updatedFields.email;
-    delete updatedFields.username;
-    delete updatedFields.newPassword;  // Remove newPassword from updatedFields
-
-    for (let field in updatedFields) {
-      user[field] = updatedFields[field];
+    // Handle password update with hashing if provided
+    if (updatedFields.newPassword) {
+      const hashedPassword = await bcrypt.hash(updatedFields.newPassword, 10);
+      updatedFields.password = hashedPassword;
     }
 
+    // Prevent certain fields from being updated
+    ['email', 'username', 'newPassword'].forEach(field => delete updatedFields[field]);
+
+    // Update user fields
+    Object.keys(updatedFields).forEach(field => {
+      if (field === 'profile' && typeof updatedFields[field] === 'object') {
+        // Handle nested profile object
+        Object.assign(user.profile, updatedFields[field]);
+      } else {
+        user[field] = updatedFields[field];
+      }
+    });
+    //console.log({user})
     await user.save();
 
     return res.status(200).json({ message: "User updated successfully.", user });
   } catch (error) {
-    console.log({ error });
+    console.error(error);
     return res.status(500).json({ error: "Server error." });
   }
 };
+
 
 
 

@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { loginUser } from '../api/auth';
+import { loginUser, updateUser } from '../api/auth';
 import axios from 'axios';
 
 export const loginThunk = createAsyncThunk(
@@ -7,7 +7,7 @@ export const loginThunk = createAsyncThunk(
   async ({ username, password }, thunkAPI) => {
     try {
       const response = await loginUser(username, password);
-      return response.data; // Assuming the API response contains the user data
+      return response;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.error || 'Login failed');
     }
@@ -19,7 +19,10 @@ export const updateUserThunk = createAsyncThunk(
   async (userData, thunkAPI) => {
     try {
       const response = await updateUser(userData); // Assuming updateUser is similar to loginUser in usage
-      return response.data;
+      return {
+        user: response.user,
+        message: response.message,
+      };
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.error || 'Update failed');
     }
@@ -71,9 +74,10 @@ export const authSlice = createSlice({
       state.error = null;
     },
     [updateUserThunk.fulfilled]: (state, action) => {
-      state.user = action.payload;
+      state.user = action.payload.user;
       state.loading = false;
       state.error = null;
+      state.lastUpdateMessage = action.payload.message;
     },
     [updateUserThunk.rejected]: (state, action) => {
       state.loading = false;

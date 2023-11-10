@@ -12,3 +12,13 @@ export const getImage = (imageName) => {
 export const formatPrice = (price) => {
   return `CA $${parseFloat(price).toFixed(2)}`;
 }
+
+export const getImageUrl = (url) => `http://localhost:8080/${url}`;
+
+export const getImageData = (image) => {
+  if (image.includes("images")) {
+    return getImageUrl(image);
+  } else {
+    return getImage(image);
+  }
+};
