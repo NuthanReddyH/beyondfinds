@@ -1,13 +1,14 @@
 // productSlice.js
 
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchSubcategories, fetchProductsByCategory, fetchCategories,fetchProductsBySubcategory, fetchAllProducts, addProduct, fetchProductsByUser } from './productThunk';
+import { fetchSubcategories, fetchProductsByCategory, fetchCategories,fetchProductsBySubcategory, fetchAllProducts, addProduct, fetchProductsByUser, fetchProductsCount } from './productThunk';
 
 const initialState = {
   categories: [], // New state for categories
   subcategories: [],
   products: [],
   userProducts:[],
+  productsCount: 0,
   loading: false,
   error: null,
 };
@@ -107,6 +108,19 @@ const productSlice = createSlice({
     [fetchProductsByUser.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload;
+    },
+    [fetchProductsCount.pending]: (state) => {
+      state.loading = true;
+      state.error = null;
+    },
+    [fetchProductsCount.fulfilled]: (state, action) => {
+      state.productsCount = action.payload;
+      state.loading = false;
+      state.error = null;
+    },
+    [fetchProductsCount.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload || 'Could not fetch products count';
     },
   },
 });

@@ -23,6 +23,8 @@ function AddListing() {
     const [subcategories, setSubcategories] = useState([]);
     const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [errors, setErrors] = useState({});
+   const [isError,setIsError] = useState(false);
   
     useEffect(() => {
       // Fetch categories from the database on component mount
@@ -49,6 +51,20 @@ function AddListing() {
         setSubcategories([]); // Clear subcategories when no category is selected
       }
     }, [category, dispatch]);
+
+    const validate = () => {
+      let tempErrors = {};
+      tempErrors.title = title ? "" : "This field is required.";
+      tempErrors.price = price ? "" : "This field is required.";
+      tempErrors.description = description ? "" : "This field is required.";
+      tempErrors.location = location ? "" : "This field is required.";
+      tempErrors.category = category ? "" : "This field is required.";
+      tempErrors.subcategory = subcategory ? "" : "This field is required.";
+      setErrors(tempErrors);
+  
+      // Return false if any errors exist
+      return Object.values(tempErrors).every(x => x === "");
+    };
   
     // Handle file change
     const handleFileChange = (file) => {
@@ -80,7 +96,7 @@ function AddListing() {
   // Handle form submit
   const handleSubmit = async (event) => {
     event.preventDefault();
-    
+    if (!validate()) return;
     const formData = new FormData();
     formData.append('title', title);
     formData.append('price', price);
@@ -94,12 +110,15 @@ function AddListing() {
     try {
       const response = await dispatch(addProduct(formData))
       if(response?.payload?.data) {
+        setIsError(false)
         handleSnackbarOpen(response?.payload?.message);
         resetFields();
       }
 
       if(response?.error) {
+        setIsError(true)
         handleSnackbarOpen(response?.payload)
+        
       }
       
       // Handle success, clear the form, maybe redirect the user or display a success message
@@ -157,6 +176,8 @@ function AddListing() {
             label="Product Title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
+            error={!!errors.title}
+          helperText={errors.title}
           />
           <TextField
             fullWidth
@@ -164,6 +185,8 @@ function AddListing() {
             label="Price"
             value={price}
             onChange={(e) => setPrice(e.target.value)}
+            error={!!errors.price}
+            helperText={errors.price}
           />
           <TextField
             fullWidth
@@ -171,6 +194,8 @@ function AddListing() {
             label="Description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
+            error={!!errors.description}
+            helperText={errors.description}
           />
           <TextField
             fullWidth
@@ -178,6 +203,8 @@ function AddListing() {
             label="Location"
             value={location}
             onChange={(e) => setLocation(e.target.value)}
+            error={!!errors.location}
+            helperText={errors.location}
           />
 
           <FormControl fullWidth margin="normal">
@@ -202,6 +229,7 @@ function AddListing() {
               label="Subcategory"
               onChange={(e) => setSubcategory(e.target.value)}
               disabled={!category}
+              
             >
               {subcategories?.map((subcat) => (
                 <MenuItem key={subcat._id} value={subcat._id}>
@@ -228,7 +256,7 @@ function AddListing() {
       >
         <SnackbarContent
           message={snackbarMessage}
-          style={{ backgroundColor: "green" }}
+          className={ !isError ? 'snack-positive' : 'snack-negative'}
           action={
             <IconButton
               size="small"

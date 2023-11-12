@@ -22,8 +22,11 @@ const UserDashboard = () => {
         dispatch(getUsersThunk());
     }, [dispatch]);
 
-    const handleDelete = (userId) => {
-        dispatch(deleteUserThunk(userId));
+    const handleDelete = async (userId) => {
+        const result = await dispatch(deleteUserThunk(userId));
+        if(result?.payload?.message) {
+            dispatch(getUsersThunk());
+        }
     };
 
     return (

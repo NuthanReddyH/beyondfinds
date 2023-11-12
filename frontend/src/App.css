@@ -93,3 +93,11 @@ main {
   color: #23B0BE;
   text-decoration: underline;
 }
+
+.snack-positive {
+  background-color: green;
+}
+
+.snack-negative {
+  background-color: red !important;
+}

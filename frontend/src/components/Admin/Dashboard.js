@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { Card, CardContent, Typography, Grid, Box } from '@mui/material';
 import { blue, red } from '@mui/material/colors';
 import { getUsersCountThunk } from '../../data/authSlice';
+import { fetchProductsCount } from '../../data/productThunk';
 
 const InfoCard = ({ title, value, icon,onClick }) => {
   return (
@@ -30,10 +31,12 @@ const InfoCard = ({ title, value, icon,onClick }) => {
 const Dashboard = () => {
   const dispatch = useDispatch();
   const userCount = useSelector((state) => state.auth.usersCount);
+  const productsCount = useSelector((state) => state.products.productsCount);
   const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(getUsersCountThunk());
+    dispatch(fetchProductsCount())
 }, [dispatch]);
 
   const navigateToUsersDashboard = () => {
@@ -48,7 +51,7 @@ const Dashboard = () => {
         <Grid item xs={12} sm={6} lg={4}> {/* Adjust size for large screens if needed */}
           <InfoCard
             title="Listings"
-            value="26,789"
+            value={productsCount?.toLocaleString()}
             icon={<Typography variant="h5" sx={{ color: blue[500] }}>💰</Typography>} // Replace with actual icon component
           />
         </Grid>
