@@ -10,6 +10,7 @@ categoryRouter.get('/products/subcategory/:subcategoryId', categoryController.ge
 categoryRouter.get('/products',categoryController.getProducts);
 categoryRouter.post('/addProduct',upload.single('productImage'),categoryController.addProduct);
 categoryRouter.get('/products/seller', categoryController.getProductsByUser);
+categoryRouter.get('/products/count', categoryController.getProductsCount);
 
 
 

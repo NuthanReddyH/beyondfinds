@@ -67,6 +67,7 @@ const register = async (req, res) => {
 const updateUser = async (req, res) => {
   const { username } = req.body; // Extract the username
   const updatedFields = req.body;
+  console.log(req.body)
 
   try {
     const user = await User.findOne({ username });
@@ -82,6 +83,11 @@ const updateUser = async (req, res) => {
       updatedFields.profile.avatar = avatarPath; // Update the avatar path
     }
 
+    if (updatedFields.phone) {
+      updatedFields.profile = updatedFields.profile || {};
+      updatedFields.profile.phone = updatedFields.phone;
+    }
+
     // Handle password update with hashing if provided
     if (updatedFields.newPassword) {
       const hashedPassword = await bcrypt.hash(updatedFields.newPassword, 10);
@@ -89,9 +95,10 @@ const updateUser = async (req, res) => {
     }
 
     // Prevent certain fields from being updated
-    ['email', 'username', 'newPassword'].forEach(field => delete updatedFields[field]);
+    ['username', 'newPassword'].forEach(field => delete updatedFields[field]);
 
     // Update user fields
+    console.log({updatedFields})
     Object.keys(updatedFields).forEach(field => {
       if (field === 'profile' && typeof updatedFields[field] === 'object') {
         // Handle nested profile object
@@ -100,7 +107,7 @@ const updateUser = async (req, res) => {
         user[field] = updatedFields[field];
       }
     });
-    //console.log({user})
+    console.log({user})
     await user.save();
 
     return res.status(200).json({ message: "User updated successfully.", user });

@@ -74,5 +74,15 @@ export const getProductsByUser = async (sellerName) => {
   }
 };
 
+export const getListingsCount = async () => {
+  try {
+    const response = await api.get('/categories/products/count'); 
+    return response.data.count;
+  } catch (error) {
+    console.error({ error });
+    throw error;
+  }
+};
+
 
 

@@ -78,12 +78,12 @@ export default function AccountMenu({ user, handleLogout }) {
         <MenuItem onClick={handleClose}> <Link to="/addListing">Add Listing</Link></MenuItem>
         <MenuItem onClick={handleClose}><Link to="/myListings">My Listings</Link></MenuItem>
         <Divider />
-        <MenuItem onClick={handleClose}>
+        {/* <MenuItem onClick={handleClose}>
           <ListItemIcon>
             <Settings fontSize="small" />
           </ListItemIcon>
           Settings
-        </MenuItem>
+        </MenuItem> */}
         <MenuItem onClick={handleLogout}>
           <ListItemIcon>
             <Logout fontSize="small" />

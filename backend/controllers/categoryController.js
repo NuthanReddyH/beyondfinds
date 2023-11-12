@@ -171,4 +171,19 @@ exports.getProductsByUser = async (req, res) => {
   }
 };
 
+exports.getProductsCount = async (req, res) => {
+  try {
+    const count = await Product.countDocuments();
+    res.status(200).json({
+      success: true,
+      count: count,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 
