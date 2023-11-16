@@ -1,6 +1,18 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { deleteUser, getUsers, getUsersCount, loginUser, updateUser } from '../api/auth';
+import { deleteUser, getUsers, getUsersCount, loginUser, updateUser, addToFavorites } from '../api/auth';
 import axios from 'axios';
+
+export const addToFavoritesThunk = createAsyncThunk(
+  'addfavorites',
+  async ({ username, productId }, thunkAPI) => {
+    try {
+      const response = await addToFavorites(username, productId);
+      return response;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.error || 'Add to favorites failed');
+    }
+  }
+);
 
 export const loginThunk = createAsyncThunk(
   'auth/login',
@@ -164,6 +176,22 @@ export const authSlice = createSlice({
     [getUsersCountThunk.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload || 'Could not fetch users count';
+
+    },
+
+    [addToFavoritesThunk.pending]: (state) => {
+      state.loading = true;
+      state.error = null;
+    },
+    [addToFavoritesThunk.fulfilled]: (state, action) => {
+      // Assuming the response contains the updated user data
+      state.user = action.payload.user;
+      state.loading = false;
+      state.error = null;
+    },
+    [addToFavoritesThunk.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload || 'Add to favorites failed';
     },
   },
 });

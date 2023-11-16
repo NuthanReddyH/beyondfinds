@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import { addToFavoritesThunk } from "../../data/authSlice"; 
 import {  getImageData } from "../../utils";
 
 const productStyles = {
@@ -112,9 +115,27 @@ const productStyles = {
 
 function ProductDetails() {
   const { productId } = useParams();
+  const dispatch = useDispatch(); // Add this line to get the dispatch function
+  
+  const user = useSelector((state) => state.auth.user); // Assuming user information is available in the Redux state
+  const userId = user ? user._id : null;
+  
   const product = useSelector((state) =>
     state.products.products.find((p) => p._id === productId)
   );
+
+  const [isFavorite, setIsFavorite] = useState(false);
+
+  const toggleFavorite = () => {
+    setIsFavorite(!isFavorite);
+    if (userId) {
+      dispatch(addToFavoritesThunk({ userId, productId }));
+    } else {
+      // Handle the case where userId is not available (e.g., user is not logged in)
+      console.warn("User not logged in. Unable to add to favorites.");
+    }
+
+  };
 
   if (!product) return <div>Product not found!</div>;
   return (
@@ -138,9 +159,23 @@ function ProductDetails() {
           />
         </div>
         <div style={productStyles.content}>
-          <h2 style={productStyles.title}>{product.title}</h2>
+          <div className="flex items-center justify-between">
+              <h2 style={productStyles.title}>{product.title}</h2>
+              <div style={{ textAlign: "center", marginTop: "20px" }}>
+            <FontAwesomeIcon
+              icon={faHeart}
+              style={{
+                color: isFavorite ? "#ff0000" : "#666", // Change color based on favorite status
+                cursor: "pointer",
+              }}
+              size="2x"
+              onClick={toggleFavorite}
+            />
+          </div>
+        </div>
           <p style={productStyles.price}>${product.price}</p>
           <p style={productStyles.description}>{product.description}</p>
+          
           {/* <img
           style={productStyles.mapImage}
           src={product.mapURL}

@@ -115,6 +115,38 @@ const updateUser = async (req, res) => {
     console.error(error);
     return res.status(500).json({ error: "Server error." });
   }
+  
+};
+
+const addToFavorites = async (req, res) => {
+  const { username, productId } = req.body; // Assuming productId is sent in the request body
+
+  try {
+    const user = await User.findOne({ username });
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found." });
+    }
+
+    const productToAdd = await Product.findById(productId);
+
+    if (!productToAdd) {
+      return res.status(404).json({ error: "Product not found." });
+    }
+
+    // Check if the product is already in the favorites list
+    if (user.favorites.includes(productId)) {
+      return res.status(400).json({ error: "Product already in favorites." });
+    }
+
+    user.favorites.push(productId);
+    await user.save();
+
+    return res.status(200).json({ message: "Product added to favorites successfully.", user });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Server error while adding to favorites." });
+  }
 };
 
 const getUsers = async (req, res) => {
@@ -172,5 +204,6 @@ module.exports = {
     updateUser,
     getUsers,
     deleteUser,
-    getUsersCount
+    getUsersCount,
+    addToFavorites,
 };
