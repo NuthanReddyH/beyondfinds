@@ -199,7 +199,7 @@ function ProductDetails() {
                 </span>
               </div>
               <Link
-                to={`/chat/${product.sellerInformation.name}/${user.username}`}
+                to={`/chat/${product.sellerInformation.name}/${user?.username}`}
               >
                 <button style={productStyles.messageButton}>Message</button>
               </Link>
