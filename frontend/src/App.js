@@ -15,6 +15,7 @@ import AdminHeader from "./components/Admin/AdminHeader";
 import UserDashboard from "./components/Admin/UserDashboard";
 import Favorites from "./components/Listings/Favorites";
 import Chat from "./components/Chat/Chat";
+import ListingDashboard from "./components/Admin/ListingDashboard";
 
 // Lazy-loaded components
 const Home = lazy(() => import("./components/Home/Home"));
@@ -56,6 +57,7 @@ function App() {
               {/* Admin Routes */}
               <Route path="/admin" element={<Dashboard />} />
               <Route path="/users" element={<UserDashboard />} />
+              <Route path="/listings" element={<ListingDashboard />} />
               <Route path="/chat/:sellerName/:username" element={<Chat />} />
               {/* Catch-all route for 404 errors */}
               <Route path="*" element={<ErrorPage />} />
