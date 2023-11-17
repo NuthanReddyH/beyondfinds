@@ -83,7 +83,7 @@ const userSchema = new Schema(
     chatHistory: [
       {
         type: Schema.Types.ObjectId,
-        ref: "Message",
+        ref: "Conversation",
       },
     ],
     profile: {

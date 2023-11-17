@@ -65,6 +65,21 @@ const register = async (req, res) => {
   }
 };
 
+const getUserIdByUsername = async (username) => {
+  try {
+    const user = await User.findOne({ username });
+
+    if (!user) {
+      return null; // Return null if the user with the given username is not found
+    }
+
+    return user._id; // Return the user ID if the user is found
+  } catch (error) {
+    console.error('Error while getting user ID by username:', error);
+    throw error; // You can handle this error as per your project's error handling strategy
+  }
+};
+
 const updateUser = async (req, res) => {
   const { username } = req.body; // Extract the username
   const updatedFields = req.body;
@@ -214,4 +229,5 @@ module.exports = {
     deleteUser,
     getUsersCount,
     addToFavorites,
+    getUserIdByUsername
 };

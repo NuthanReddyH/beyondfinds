@@ -1,10 +1,10 @@
-import React, { useState , useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
-import { addToFavoritesThunk } from "../../data/authSlice"; 
-import {  getImageData } from "../../utils";
+import { addToFavoritesThunk } from "../../data/authSlice";
+import { getImageData } from "../../utils";
 import { fetchAllProducts } from "../../data/productThunk";
 
 const productStyles = {
@@ -18,7 +18,7 @@ const productStyles = {
     width: "80%",
     margin: "0 auto",
     padding: "20px",
-    marginTop: "40px"
+    marginTop: "40px",
   },
   breadcrumbLink: {
     textDecoration: "none",
@@ -117,7 +117,7 @@ const productStyles = {
 function ProductDetails() {
   const { productId } = useParams();
   const dispatch = useDispatch();
-  
+
   const user = useSelector((state) => state.auth.user);
   const userId = user ? user._id : null;
   const favoriteList = user?.favorites;
@@ -125,7 +125,7 @@ function ProductDetails() {
     state.products.products.find((p) => p._id === productId)
   );
 
-  const isFavoriteAdded = favoriteList?.includes(productId)
+  const isFavoriteAdded = favoriteList?.includes(productId);
   const [isFavorite, setIsFavorite] = useState(isFavoriteAdded);
 
   const toggleFavorite = () => {
@@ -136,13 +136,11 @@ function ProductDetails() {
       // Handle the case where userId is not available (e.g., user is not logged in)
       console.warn("User not logged in. Unable to add to favorites.");
     }
-
   };
 
   useEffect(() => {
     dispatch(fetchAllProducts());
   }, [dispatch]);
-
 
   if (!product) return <div>Product not found!</div>;
   return (
@@ -167,22 +165,22 @@ function ProductDetails() {
         </div>
         <div style={productStyles.content}>
           <div className="flex items-center justify-between">
-              <h2 style={productStyles.title}>{product.title}</h2>
-              <div style={{ textAlign: "center", marginTop: "20px" }}>
-            <FontAwesomeIcon
-              icon={faHeart}
-              style={{
-                color: isFavorite ? "#ff0000" : "#666", // Change color based on favorite status
-                cursor: "pointer",
-              }}
-              size="2x"
-              onClick={toggleFavorite}
-            />
+            <h2 style={productStyles.title}>{product.title}</h2>
+            <div style={{ textAlign: "center", marginTop: "20px" }}>
+              <FontAwesomeIcon
+                icon={faHeart}
+                style={{
+                  color: isFavorite ? "#ff0000" : "#666", // Change color based on favorite status
+                  cursor: "pointer",
+                }}
+                size="2x"
+                onClick={toggleFavorite}
+              />
+            </div>
           </div>
-        </div>
           <p style={productStyles.price}>${product.price}</p>
           <p style={productStyles.description}>{product.description}</p>
-          
+
           {/* <img
           style={productStyles.mapImage}
           src={product.mapURL}
@@ -200,7 +198,11 @@ function ProductDetails() {
                   {product.sellerInformation.name}
                 </span>
               </div>
-              <button style={productStyles.messageButton}>Message</button>
+              <Link
+                to={`/chat/${product.sellerInformation.name}/${user.username}`}
+              >
+                <button style={productStyles.messageButton}>Message</button>
+              </Link>
             </div>
           </div>
         </div>
