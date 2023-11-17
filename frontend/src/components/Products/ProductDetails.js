@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState , useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { addToFavoritesThunk } from "../../data/authSlice"; 
 import {  getImageData } from "../../utils";
+import { fetchAllProducts } from "../../data/productThunk";
 
 const productStyles = {
   breadcrumbs: {
@@ -115,9 +116,9 @@ const productStyles = {
 
 function ProductDetails() {
   const { productId } = useParams();
-  const dispatch = useDispatch(); // Add this line to get the dispatch function
+  const dispatch = useDispatch();
   
-  const user = useSelector((state) => state.auth.user); // Assuming user information is available in the Redux state
+  const user = useSelector((state) => state.auth.user);
   const userId = user ? user._id : null;
   
   const product = useSelector((state) =>
@@ -136,6 +137,11 @@ function ProductDetails() {
     }
 
   };
+
+  useEffect(() => {
+    dispatch(fetchAllProducts());
+  }, [dispatch]);
+
 
   if (!product) return <div>Product not found!</div>;
   return (

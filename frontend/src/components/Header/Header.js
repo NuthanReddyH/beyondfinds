@@ -9,6 +9,7 @@ import { logout } from "../../data/authSlice";
 import AccountMenu from "../common/ProfileToggle";
 import { fetchCategories } from "../../data/productThunk";
 import SearchIcon from '@mui/icons-material/Search';
+import SearchComponent from "../common/Search";
 const Header = () => {
   const dispatch = useDispatch();
   const { isAuthenticated, user } = useSelector((state) => state.auth);
@@ -38,10 +39,7 @@ const Header = () => {
           </Link>
           
           <div className="flex space-x-4 ml-auto items-center">
-            <div className="search-wrapper">
-                <SearchIcon></SearchIcon>
-                <input className="search"></input>
-              </div>
+              <SearchComponent />
             {isAuthenticated ? (
               <>
                 <IconButton color="inherit">

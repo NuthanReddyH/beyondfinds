@@ -16,7 +16,7 @@ export const formatPrice = (price) => {
 export const getImageUrl = (url) => `http://localhost:8080/${url}`;
 
 export const getImageData = (image) => {
-  if (image.includes("images")) {
+  if (image?.includes("images")) {
     return getImageUrl(image);
   } else {
     return getImage(image);

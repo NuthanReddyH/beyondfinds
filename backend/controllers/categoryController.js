@@ -187,3 +187,34 @@ exports.getProductsCount = async (req, res) => {
 };
 
 
+exports.searchProducts = async (req, res) => {
+  try {
+    const searchString = req.query.search;
+
+    // Search in categories, subcategories, and product titles
+    const searchResults = await Product.find({
+      $or: [
+        { 'title': { $regex: searchString, $options: 'i' } },
+        { 'category.name': { $regex: searchString, $options: 'i' } },
+        { 'subcategory.name': { $regex: searchString, $options: 'i' } }
+      ]
+    }).populate('category').populate('subcategory');
+
+    if (searchResults.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: 'No products found matching the search criteria',
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: searchResults
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
+};
