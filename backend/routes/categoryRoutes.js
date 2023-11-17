@@ -11,7 +11,7 @@ categoryRouter.get('/products',categoryController.getProducts);
 categoryRouter.post('/addProduct',upload.single('productImage'),categoryController.addProduct);
 categoryRouter.get('/products/seller', categoryController.getProductsByUser);
 categoryRouter.get('/products/count', categoryController.getProductsCount);
-
+categoryRouter.get('/search', categoryController.searchProducts);
 
 
 module.exports = categoryRouter;

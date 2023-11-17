@@ -1,7 +1,7 @@
 // productThunks.js
 
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { getSubcategoriesByCategory, getProductsByCategory,getCategories,getProductsBySubcategory, getProducts, addProduct as addProductApi, getProductsByUser, getListingsCount } from '../api/productService'; // Import your service methods
+import { getSubcategoriesByCategory, getProductsByCategory,getCategories,getProductsBySubcategory, getProducts, addProduct as addProductApi, getProductsByUser, getListingsCount, searchProducts } from '../api/productService'; // Import your service methods
 
 export const fetchSubcategories = createAsyncThunk(
   'products/fetchSubcategories',
@@ -96,6 +96,18 @@ export const fetchProductsCount = createAsyncThunk(
       return response; // Assuming the API returns an object with a count property
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.error || 'Could not fetch products count');
+    }
+  }
+);
+
+export const fetchProductsBySearch = createAsyncThunk(
+  'products/fetchProductsBySearch',
+  async (searchString, thunkAPI) => {
+    try {
+      const response = await searchProducts(searchString);
+      return response;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.error || 'Could not perform search');
     }
   }
 );
