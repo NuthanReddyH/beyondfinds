@@ -135,18 +135,27 @@ const addToFavorites = async (req, res) => {
     // Check if the product is already in the favorites list
     if (user.favorites.includes(productId)) {
       // Remove the product from favorites
-     const user =  await User.findByIdAndUpdate(userId, { $pull: { favorites: productId } });
-      return res.status(200).json({ message: "Product removed from favorites successfully." , user});
+      const updatedUser = await User.findByIdAndUpdate(
+        userId, 
+        { $pull: { favorites: productId } },
+        { new: true }  // Get the updated document
+      );
+      return res.status(200).json({ message: "Product removed from favorites successfully.", user: updatedUser });
     } else {
       // Add the product to favorites
-      const user = await User.findByIdAndUpdate(userId, { $addToSet: { favorites: productId } });
-      return res.status(200).json({ message: "Product added to favorites successfully." , user});
+      const updatedUser = await User.findByIdAndUpdate(
+        userId, 
+        { $addToSet: { favorites: productId } },
+        { new: true }  // Get the updated document
+      );
+      return res.status(200).json({ message: "Product added to favorites successfully.", user: updatedUser });
     }
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Server error while updating favorites." });
   }
 };
+
 
 const getUsers = async (req, res) => {
   try {
