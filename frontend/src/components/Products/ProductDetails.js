@@ -1,6 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useState , useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import { addToFavoritesThunk } from "../../data/authSlice"; 
 import {  getImageData } from "../../utils";
 import { fetchAllProducts } from "../../data/productThunk";
 
@@ -114,9 +117,27 @@ const productStyles = {
 function ProductDetails() {
   const { productId } = useParams();
   const dispatch = useDispatch();
+  
+  const user = useSelector((state) => state.auth.user);
+  const userId = user ? user._id : null;
+  const favoriteList = user?.favorites;
   const product = useSelector((state) =>
     state.products.products.find((p) => p._id === productId)
   );
+
+  const isFavoriteAdded = favoriteList?.includes(product._id)
+  const [isFavorite, setIsFavorite] = useState(isFavoriteAdded);
+
+  const toggleFavorite = () => {
+    setIsFavorite(!isFavorite);
+    if (userId) {
+      dispatch(addToFavoritesThunk({ userId, productId }));
+    } else {
+      // Handle the case where userId is not available (e.g., user is not logged in)
+      console.warn("User not logged in. Unable to add to favorites.");
+    }
+
+  };
 
   useEffect(() => {
     dispatch(fetchAllProducts());
@@ -145,9 +166,23 @@ function ProductDetails() {
           />
         </div>
         <div style={productStyles.content}>
-          <h2 style={productStyles.title}>{product.title}</h2>
+          <div className="flex items-center justify-between">
+              <h2 style={productStyles.title}>{product.title}</h2>
+              <div style={{ textAlign: "center", marginTop: "20px" }}>
+            <FontAwesomeIcon
+              icon={faHeart}
+              style={{
+                color: isFavorite ? "#ff0000" : "#666", // Change color based on favorite status
+                cursor: "pointer",
+              }}
+              size="2x"
+              onClick={toggleFavorite}
+            />
+          </div>
+        </div>
           <p style={productStyles.price}>${product.price}</p>
           <p style={productStyles.description}>{product.description}</p>
+          
           {/* <img
           style={productStyles.mapImage}
           src={product.mapURL}

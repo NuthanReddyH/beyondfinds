@@ -42,9 +42,9 @@ const Header = () => {
               <SearchComponent />
             {isAuthenticated ? (
               <>
-                <IconButton color="inherit">
+                <Link to="/favorites"><IconButton color="inherit">
                   <FavoriteBorder />
-                </IconButton>
+                </IconButton></Link>
                 <AccountMenu user={user} handleLogout={handleLogout} />
               </>
             ) : (

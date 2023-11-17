@@ -1,6 +1,6 @@
 const express = require('express');
 const authRouter = express.Router();
-const { login, register,updateUser, getUsers, deleteUser, getUsersCount } = require('../../controllers/authController');
+const { login, register,updateUser, getUsers, deleteUser, getUsersCount, addToFavorites } = require('../../controllers/authController');
 const upload = require('../../upload');
 
 authRouter.post('/login', login);
@@ -9,5 +9,6 @@ authRouter.put('/update', upload.single('avatar'), updateUser);
 authRouter.get('/users', getUsers);
 authRouter.delete('/user/:id', deleteUser);
 authRouter.get('/users/count', getUsersCount);
+authRouter.put('/addfavorites', addToFavorites);
 
 module.exports = authRouter;

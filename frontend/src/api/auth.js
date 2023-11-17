@@ -87,3 +87,21 @@ export const deleteUser = async (userId) => {
     throw error;
   }
 };
+
+
+export const addToFavorites = async (userId, productId) => {
+  try {
+    const response = await api.put('/auth/addfavorites', { userId, productId });
+    if (response.data) {
+      // Assuming the response contains the updated user data
+      localStorage.setItem('userInfo', JSON.stringify(response?.data?.user));
+      return response.data;
+    } else {
+      console.log("error");
+      throw new Error('Add to favorites failed');
+    }
+  } catch (error) {
+    console.log({ error });
+    throw error;
+  }
+};

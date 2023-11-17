@@ -13,6 +13,7 @@ import AddListing from "./components/Listings/AddListing";
 import MyListings from "./components/Listings/MyListing";
 import AdminHeader from "./components/Admin/AdminHeader";
 import UserDashboard from "./components/Admin/UserDashboard";
+import Favorites from "./components/Listings/Favorites";
 
 // Lazy-loaded components
 const Home = lazy(() => import("./components/Home/Home"));
@@ -50,6 +51,7 @@ function App() {
               <Route path="/product/:productId" element={<ProductDetails />} />
               <Route path="/addListing" element={<AddListing />} />
               <Route path="/myListings" element={<MyListings />} />
+              <Route path="/favorites" element={<Favorites />} />
               {/* Admin Routes */}
               <Route path="/admin" element={<Dashboard />} />
               <Route path="/users" element={<UserDashboard />} />
