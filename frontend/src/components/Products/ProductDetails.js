@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {  getImageData } from "../../utils";
+import { fetchAllProducts } from "../../data/productThunk";
 
 const productStyles = {
   breadcrumbs: {
@@ -112,9 +113,15 @@ const productStyles = {
 
 function ProductDetails() {
   const { productId } = useParams();
+  const dispatch = useDispatch();
   const product = useSelector((state) =>
     state.products.products.find((p) => p._id === productId)
   );
+
+  useEffect(() => {
+    dispatch(fetchAllProducts());
+  }, [dispatch]);
+
 
   if (!product) return <div>Product not found!</div>;
   return (

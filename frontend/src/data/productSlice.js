@@ -1,7 +1,7 @@
 // productSlice.js
 
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchSubcategories, fetchProductsByCategory, fetchCategories,fetchProductsBySubcategory, fetchAllProducts, addProduct, fetchProductsByUser, fetchProductsCount } from './productThunk';
+import { fetchSubcategories, fetchProductsByCategory, fetchCategories,fetchProductsBySubcategory, fetchAllProducts, addProduct, fetchProductsByUser, fetchProductsCount, fetchProductsBySearch } from './productThunk';
 
 const initialState = {
   categories: [], // New state for categories
@@ -9,6 +9,7 @@ const initialState = {
   products: [],
   userProducts:[],
   productsCount: 0,
+  searchResults: [],
   loading: false,
   error: null,
 };
@@ -16,7 +17,11 @@ const initialState = {
 const productSlice = createSlice({
   name: 'products',
   initialState,
-  reducers: {},
+  reducers: {
+    clearSearchResults: (state) => {
+      state.searchResults = []; 
+  }
+  },
   extraReducers: {
     // Handle fetchCategories lifecycle
     [fetchCategories.pending]: (state) => {
@@ -122,7 +127,21 @@ const productSlice = createSlice({
       state.loading = false;
       state.error = action.payload || 'Could not fetch products count';
     },
+    [fetchProductsBySearch.pending]: (state) => {
+      state.loading = true;
+      state.error = null;
+    },
+    [fetchProductsBySearch.fulfilled]: (state, action) => {
+      state.searchResults = action.payload;
+      state.loading = false;
+    },
+    [fetchProductsBySearch.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload || 'Could not perform search';
+    },
   },
 });
+
+export const { clearSearchResults } = productSlice.actions;
 
 export default productSlice.reducer;

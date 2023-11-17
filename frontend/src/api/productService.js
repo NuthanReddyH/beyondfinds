@@ -85,4 +85,12 @@ export const getListingsCount = async () => {
 };
 
 
-
+export const searchProducts = async (searchString) => {
+  try {
+    const response = await api.get(`/categories/search?search=${searchString}`);
+    return response.data.data;
+  } catch (error) {
+    console.error('There was an error performing the search!', error);
+    throw error;
+  }
+};
