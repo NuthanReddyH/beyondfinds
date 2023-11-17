@@ -4,9 +4,9 @@ import axios from 'axios';
 
 export const addToFavoritesThunk = createAsyncThunk(
   'addfavorites',
-  async ({ username, productId }, thunkAPI) => {
+  async ({ userId, productId }, thunkAPI) => {
     try {
-      const response = await addToFavorites(username, productId);
+      const response = await addToFavorites(userId, productId);
       return response;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.error || 'Add to favorites failed');

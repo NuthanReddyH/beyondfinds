@@ -91,8 +91,7 @@ export const deleteUser = async (userId) => {
 
 export const addToFavorites = async (userId, productId) => {
   try {
-    const response = await api.post('/addfavorites', { userId, productId });
-    
+    const response = await api.put('/auth/addfavorites', { userId, productId });
     if (response.data) {
       // Assuming the response contains the updated user data
       localStorage.setItem('userInfo', JSON.stringify(response?.data?.user));

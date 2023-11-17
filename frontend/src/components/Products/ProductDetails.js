@@ -120,12 +120,13 @@ function ProductDetails() {
   
   const user = useSelector((state) => state.auth.user);
   const userId = user ? user._id : null;
-  
+  const favoriteList = user?.favorites;
   const product = useSelector((state) =>
     state.products.products.find((p) => p._id === productId)
   );
 
-  const [isFavorite, setIsFavorite] = useState(false);
+  const isFavoriteAdded = favoriteList?.includes(product._id)
+  const [isFavorite, setIsFavorite] = useState(isFavoriteAdded);
 
   const toggleFavorite = () => {
     setIsFavorite(!isFavorite);

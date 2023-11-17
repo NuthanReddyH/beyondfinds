@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const User = require('../models/User');
+const {Product} = require('../models/Products');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 const { JWT_SECRET_KEY } = process.env;
@@ -67,7 +68,6 @@ const register = async (req, res) => {
 const updateUser = async (req, res) => {
   const { username } = req.body; // Extract the username
   const updatedFields = req.body;
-  console.log(req.body)
 
   try {
     const user = await User.findOne({ username });
@@ -119,33 +119,32 @@ const updateUser = async (req, res) => {
 };
 
 const addToFavorites = async (req, res) => {
-  const { username, productId } = req.body; // Assuming productId is sent in the request body
+  const { userId, productId } = req.body;
 
   try {
-    const user = await User.findOne({ username });
-
+    const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({ error: "User not found." });
     }
 
     const productToAdd = await Product.findById(productId);
-
     if (!productToAdd) {
       return res.status(404).json({ error: "Product not found." });
     }
 
     // Check if the product is already in the favorites list
     if (user.favorites.includes(productId)) {
-      return res.status(400).json({ error: "Product already in favorites." });
+      // Remove the product from favorites
+     const user =  await User.findByIdAndUpdate(userId, { $pull: { favorites: productId } });
+      return res.status(200).json({ message: "Product removed from favorites successfully." , user});
+    } else {
+      // Add the product to favorites
+      const user = await User.findByIdAndUpdate(userId, { $addToSet: { favorites: productId } });
+      return res.status(200).json({ message: "Product added to favorites successfully." , user});
     }
-
-    user.favorites.push(productId);
-    await user.save();
-
-    return res.status(200).json({ message: "Product added to favorites successfully.", user });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: "Server error while adding to favorites." });
+    return res.status(500).json({ error: "Server error while updating favorites." });
   }
 };
 
