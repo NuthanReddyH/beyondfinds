@@ -125,7 +125,7 @@ function ProductDetails() {
     state.products.products.find((p) => p._id === productId)
   );
 
-  const isFavoriteAdded = favoriteList?.includes(product._id)
+  const isFavoriteAdded = favoriteList?.includes(productId)
   const [isFavorite, setIsFavorite] = useState(isFavoriteAdded);
 
   const toggleFavorite = () => {
