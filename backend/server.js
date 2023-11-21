@@ -5,7 +5,18 @@ const passport = require('./passport');
 const router = require('./routes/index');
 const cors = require('cors');
 const path = require('path');
+const http = require('http');
+const { Server } = require('socket.io');
+const socketServer = require('./socketServer'); // Import the Socket.io event handling logic
+
 const app = express();
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: 'http://localhost:3000',
+    methods: ['GET', 'POST'],
+  },
+});
 
 // Middleware
 app.use(cors({
@@ -29,16 +40,19 @@ app.use('/images', express.static(path.join(__dirname, 'images')));
 
 app.use('/api', router);
 
+// Connect to MongoDB
 const uri = process.env.DATABASE_URL;
 mongoose.connect(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
 
-console.log('DB has connected Successfully')
+console.log('DB has connected Successfully');
+
+// Initialize Socket.io event handling
+socketServer(io); // Pass the io instance to the socketServer
 
 const port = process.env.PORT || 8080;
-app.listen(port, () => {
+server.listen(port, () => {
   console.log(`App is running at port ${port}!!!`);
 });
-

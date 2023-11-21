@@ -33,7 +33,7 @@ const AdminHeader = () => {
               <Link to="/users">Users</Link>
             </li>
             <li>
-              <Link to="/admin/listings">Listings</Link>
+              <Link to="/listings">Listings</Link>
             </li>
             <li>
               <button onClick={handleLogout}>Logout</button>

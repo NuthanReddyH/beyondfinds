@@ -42,25 +42,30 @@ const Dashboard = () => {
   const navigateToUsersDashboard = () => {
     navigate('/users'); // Update to the path of your users dashboard
   };
+
+  const navigateToListingsDashboard = () => {
+    navigate('/listings');
+  }
   return (
     <Box sx={{ flexGrow: 1, padding: 3 }}> {/* Add padding to the overall container */}
       <Typography variant="h4" component="h2" align="center" gutterBottom sx={{ color: 'black',marginTop: "20px" }}>
         Dashboard
       </Typography>
-      <Grid container spacing={2} justifyContent="center" style={{margin: '40px'}}> {/* Center the grid items */}
-        <Grid item xs={12} sm={6} lg={4}> {/* Adjust size for large screens if needed */}
+      <Grid container spacing={2} justifyContent="center" style={{margin: '40px'}}> 
+        <Grid item xs={12} sm={6} lg={4}> 
           <InfoCard
             title="Listings"
             value={productsCount?.toLocaleString()}
-            icon={<Typography variant="h5" sx={{ color: blue[500] }}>💰</Typography>} // Replace with actual icon component
+            onClick={navigateToListingsDashboard} 
+            icon={<Typography variant="h5" sx={{ color: blue[500] }}>💰</Typography>}
           />
         </Grid>
-        <Grid item xs={12} sm={6} lg={4}> {/* Adjust size for large screens if needed */}
+        <Grid item xs={12} sm={6} lg={4}>
           <InfoCard
             title="Users"
             value={userCount.toLocaleString()}
             onClick={navigateToUsersDashboard} 
-            icon={<Typography variant="h5" sx={{ color: red[500] }}>👤</Typography>} // Replace with actual icon component
+            icon={<Typography variant="h5" sx={{ color: red[500] }}>👤</Typography>} 
           />
         </Grid>
       </Grid>
