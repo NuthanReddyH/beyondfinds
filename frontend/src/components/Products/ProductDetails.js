@@ -6,6 +6,12 @@ import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { addToFavoritesThunk } from "../../data/authSlice";
 import { getImageData } from "../../utils";
 import { fetchAllProducts } from "../../data/productThunk";
+import {
+  Snackbar,
+  SnackbarContent,
+  IconButton,
+} from "@mui/material";
+import { Close } from "@mui/icons-material";
 
 const productStyles = {
   breadcrumbs: {
@@ -117,7 +123,19 @@ const productStyles = {
 function ProductDetails() {
   const { productId } = useParams();
   const dispatch = useDispatch();
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [isError, setIsError] = useState(false);
 
+  const handleSnackbarOpen = (message, error = false) => {
+    setSnackbarMessage(message);
+    setIsError(error);
+    setSnackbarOpen(true);
+  };
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
   const user = useSelector((state) => state.auth.user);
   const userId = user ? user._id : null;
   const favoriteList = user?.favorites;
@@ -128,13 +146,18 @@ function ProductDetails() {
   const isFavoriteAdded = favoriteList?.includes(productId);
   const [isFavorite, setIsFavorite] = useState(isFavoriteAdded);
 
-  const toggleFavorite = () => {
+  const toggleFavorite = async () => {
     setIsFavorite(!isFavorite);
     if (userId) {
-      dispatch(addToFavoritesThunk({ userId, productId }));
+      const response = await dispatch(addToFavoritesThunk({ userId, productId }));
+      const message = response?.payload?.message
+      message && handleSnackbarOpen(message);
     } else {
       // Handle the case where userId is not available (e.g., user is not logged in)
-      console.warn("User not logged in. Unable to add to favorites.");
+      handleSnackbarOpen(
+        "User not logged in. Unable to add to favorites.",
+        true
+      );
     }
   };
 
@@ -143,6 +166,8 @@ function ProductDetails() {
   }, [dispatch]);
 
   if (!product) return <div>Product not found!</div>;
+
+  console.log({isError})
   return (
     <>
       <div style={productStyles.breadcrumbs}>
@@ -207,6 +232,27 @@ function ProductDetails() {
           </div>
         </div>
       </div>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+      >
+        <SnackbarContent
+          message={snackbarMessage}
+          className={!isError ? "snack-positive" : "snack-negative"}
+          action={
+            <IconButton
+              size="small"
+              aria-label="close"
+              color="inherit"
+              onClick={handleSnackbarClose}
+            >
+              <Close fontSize="small" />
+            </IconButton>
+          }
+        />
+      </Snackbar>
     </>
   );
 }
