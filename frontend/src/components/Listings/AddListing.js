@@ -6,7 +6,7 @@ import { Box, Button, TextField, FormControl, InputLabel, Select, MenuItem, Typo
 import { useDispatch, useSelector } from 'react-redux';
 import { addProduct, fetchCategories, fetchSubcategories } from '../../data/productThunk';
 import FileUploadButton from '../common/FileUploadButton';
-import { Visibility, VisibilityOff, Close } from "@mui/icons-material";
+import {  Close } from "@mui/icons-material";
 
 function AddListing() {
     const dispatch = useDispatch();
