@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const User = require('../models/User');
 const {Product} = require('../models/Products');
+const Conversation  = require('../models/Conversations');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 const { JWT_SECRET_KEY } = process.env;
@@ -218,6 +219,42 @@ const deleteUser = async (req, res) => {
   }
 };
 
+const getConversations = async (req, res) => {
+  const conversationId = req.params.conversationId;
+
+  try {
+    const conversation = await Conversation.findById(conversationId);
+
+    if (!conversation) {
+      return res.status(404).json({ error: "Conversation not found." });
+    }
+
+    return res.status(200).json(conversation);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Server error while retrieving the conversation." });
+  }
+};
+
+const getUsernameFromUserId = async (req, res) => {
+  const userId = req.params.userId;
+
+  try {
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found." });
+    }
+
+    return res.status(200).json({ username: user.username });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Server error while retrieving username." });
+  }
+};
+
+
+
 
 
 
@@ -229,5 +266,7 @@ module.exports = {
     deleteUser,
     getUsersCount,
     addToFavorites,
-    getUserIdByUsername
+    getUserIdByUsername,
+    getUsernameFromUserId,
+    getConversations
 };

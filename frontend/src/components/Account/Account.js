@@ -216,7 +216,7 @@ function Profile() {
           Save Changes
         </Button>
       </TabPanel>
-      {/* ... other TabPanels for Change Password, My Listing, Manage Membership ... */}
+
     </Box>
   );
 }

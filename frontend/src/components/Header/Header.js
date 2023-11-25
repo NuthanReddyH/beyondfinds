@@ -1,17 +1,21 @@
 import React, { useEffect } from "react";
-import './Header.css';
+import "./Header.css";
 import { useDispatch, useSelector } from "react-redux";
-import { Link,useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { IconButton } from "@mui/material";
 import { FavoriteBorder } from "@mui/icons-material";
 import companyLogo from "../../assets/logo.png";
 import { logout } from "../../data/authSlice";
 import AccountMenu from "../common/ProfileToggle";
 import { fetchCategories } from "../../data/productThunk";
-import SearchIcon from '@mui/icons-material/Search';
+import SearchIcon from "@mui/icons-material/Search";
 import SearchComponent from "../common/Search";
+import MessageIcon from "@mui/icons-material/Message";
+
 const Header = () => {
   const dispatch = useDispatch();
+  const location = useLocation();
+  const showCategoryLinks = location.pathname !== "/chat";
   const { isAuthenticated, user } = useSelector((state) => state.auth);
   const { categories } = useSelector((state) => state.products || []);
   const navigate = useNavigate();
@@ -37,14 +41,21 @@ const Header = () => {
               className="self-center h-10 w-auto"
             />
           </Link>
-          
+
           <div className="flex space-x-4 ml-auto items-center">
-              <SearchComponent />
+            <SearchComponent />
             {isAuthenticated ? (
               <>
-                <Link to="/favorites"><IconButton color="inherit">
-                  <FavoriteBorder />
-                </IconButton></Link>
+                <Link to="/favorites">
+                  <IconButton color="inherit">
+                    <FavoriteBorder />
+                  </IconButton>
+                </Link>
+                <Link to="/chat">
+                  <IconButton color="inherit">
+                    <MessageIcon />
+                  </IconButton>
+                </Link>
                 <AccountMenu user={user} handleLogout={handleLogout} />
               </>
             ) : (
@@ -60,28 +71,30 @@ const Header = () => {
           </div>
         </div>
       </nav>
-      <div className="bottom-nav bg-gray-100 py-4">
-        <ul className="flex justify-between container mx-auto lg:px-16 sm:px-8">
-          <li>
-            <Link
-              to={`/products`}
-              className="hover:text-gray-700 focus:outline-none"
-            >
-              All
-            </Link>
-          </li>
-          {categories?.map((category) => (
-            <li key={category._id}>
+      {showCategoryLinks && (
+        <div className="bottom-nav bg-gray-100 py-4">
+          <ul className="flex justify-between container mx-auto lg:px-16 sm:px-8">
+            <li>
               <Link
-                to={`/category/${category.name}/${category._id}`}
-                className="hover:text-gray-700 focus:outline-none ml-2"
+                to={`/products`}
+                className="hover:text-gray-700 focus:outline-none"
               >
-                {category.name}
+                All
               </Link>
             </li>
-          ))}
-        </ul>
-      </div>
+            {categories?.map((category) => (
+              <li key={category._id}>
+                <Link
+                  to={`/category/${category.name}/${category._id}`}
+                  className="hover:text-gray-700 focus:outline-none ml-2"
+                >
+                  {category.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 };
