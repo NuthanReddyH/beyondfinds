@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { deleteUser, getUsers, getUsersCount, loginUser, updateUser, addToFavorites } from '../api/auth';
+import { deleteUser, getUsers, getUsersCount, loginUser, updateUser, addToFavorites, getConversations, getUsernameById } from '../api/auth';
 import axios from 'axios';
 
 export const addToFavoritesThunk = createAsyncThunk(
@@ -77,6 +77,30 @@ export const getUsersCountThunk = createAsyncThunk(
   }
 );
 
+export const getConversationsThunk = createAsyncThunk(
+  'auth/getConversations',
+  async (conversationId, thunkAPI) => {
+    try {
+      const response = await getConversations(conversationId);
+      return response;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.error || 'Could not fetch conversations');
+    }
+  }
+);
+
+export const getUsernameByIdThunk = createAsyncThunk(
+  'auth/getUsernameById',
+  async (userId, thunkAPI) => {
+    try {
+      const response = await getUsernameById(userId);
+      return response;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.error || 'Could not fetch username');
+    }
+  }
+);
+
 export const authSlice = createSlice({
   name: 'auth',
   initialState: {
@@ -86,7 +110,9 @@ export const authSlice = createSlice({
     usersCount: 0,
     loading: false,
     error: null,
-    isAdmin: false
+    isAdmin: false,
+    conversations: {},
+    username: null
   },
   reducers: {
     logout(state) {
@@ -192,6 +218,31 @@ export const authSlice = createSlice({
     [addToFavoritesThunk.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload || 'Add to favorites failed';
+    },
+
+    [getConversationsThunk.pending]: (state) => {
+      state.loading = true;
+    },
+    [getConversationsThunk.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.conversations = action.payload;
+    },
+    [getConversationsThunk.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+  
+    [getUsernameByIdThunk.pending]: (state) => {
+      state.loading = true;
+    },
+    [getUsernameByIdThunk.fulfilled]: (state, action) => {
+      console.log({action})
+      state.loading = false;
+      state.username = action.payload;
+    },
+    [getUsernameByIdThunk.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
     },
   },
 });

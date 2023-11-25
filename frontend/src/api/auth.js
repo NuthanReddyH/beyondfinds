@@ -105,3 +105,23 @@ export const addToFavorites = async (userId, productId) => {
     throw error;
   }
 };
+
+export const getConversations = async (conversationId) => {
+  try {
+    const response = await api.get(`/auth/conversations/${conversationId}`);
+    return response.data;
+  } catch (error) {
+    console.error({ error });
+    throw error;
+  }
+};
+
+export const getUsernameById = async (userId) => {
+  try {
+    const response = await api.get(`/auth/username/${userId}`);
+    return response.data.username;
+  } catch (error) {
+    console.error({ error });
+    throw error;
+  }
+};

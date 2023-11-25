@@ -40,6 +40,7 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [isError,setIsError] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (event) => {
@@ -63,39 +64,43 @@ const Login = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     setErrors({});
-
+  
     const newErrors = {};
-
+  
     if (!formData.username) {
       newErrors.username = "Username is required";
     }
-
+  
     if (!formData.password) {
       newErrors.password = "Password is required";
     }
-
+  
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
     }
-
+  
     const result = await dispatch(
       loginThunk({ username: formData.username, password: formData.password })
     );
     if (result?.error) {
       const errorMessage = result?.payload;
+      setIsError(true)
       handleSnackbarOpen(errorMessage);
     } else {
-      const isAdmin = parseInt(localStorage.getItem('isAdmin'));
-      console.log({isAdmin})
-      if(!!isAdmin) {
-        navigate("/admin")
-      } else {
-        navigate("/");
-      }
-      
+      setIsError(false)
+      handleSnackbarOpen("User logged in successfully");
+      setTimeout(() => {
+        const isAdmin = parseInt(localStorage.getItem('isAdmin'), 10);
+        if(isAdmin) {
+          navigate("/admin");
+        } else {
+          navigate("/");
+        }
+      }, 600);
     }
   };
+  
 
   return (
     <ThemeProvider theme={theme}>
@@ -189,7 +194,7 @@ const Login = () => {
       >
         <SnackbarContent
           message={snackbarMessage}
-          style={{ backgroundColor: "#FF3D00" }}
+          className={ !isError ? 'snack-positive' : 'snack-negative'}
           action={
             <IconButton
               size="small"

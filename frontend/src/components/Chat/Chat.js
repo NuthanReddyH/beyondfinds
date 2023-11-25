@@ -4,9 +4,11 @@ import { io } from "socket.io-client";
 import "./Chat.css";
 import { useSelector } from "react-redux";
 
-const Chat = () => {
-  const { sellerName, username } = useParams();
+const Chat = ({receiver}) => {
   const user = useSelector((state) => state.auth.user);
+  const { sellerName, username } = useParams();
+  const receiverName = !sellerName ? receiver : sellerName
+  const senderName = !username ? user?.username : username
   console.log({ user });
   const userId = user?._id;
   const [message, setMessage] = useState("");
@@ -16,46 +18,28 @@ const Chat = () => {
 
   useEffect(() => {
     // Connect to Socket.io server
-    const newSocket = io("http://localhost:8080"); // Replace with your server URL
-
+    const newSocket = io("http://localhost:8080", {
+      query: { senderName, receiverName },
+    });
     setSocket(newSocket);
+    
+    newSocket.emit("join", { senderId: senderName, receiverId: receiverName });
 
-    // Clean up on component unmount
-    return () => {
-      if (newSocket) {
-        newSocket.disconnect();
-      }
-    };
-  }, []);
+    newSocket.on("receiveMessage", (data) => {
+      setMessages((prevMessages) => [...prevMessages, data.message]);
+    });
 
-  useEffect(() => {
-    // Connect to Socket.io server
-    const newSocket = io("http://localhost:8080"); // Replace with your server URL
-
-    setSocket(newSocket);
-
-    // Clean up on component unmount
-    return () => {
-      if (newSocket) {
-        newSocket.disconnect();
-      }
-    };
-  }, []);
+    return () => newSocket.disconnect();
+  }, [senderName, receiverName]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Fetch chat history from the server
         const response = await fetch(
-          `http://localhost:8080/api/chat/getMessages/${username}/${sellerName}`
+          `http://localhost:8080/api/chat/getMessages/${senderName}/${receiverName}`
         );
-        console.log({ response });
         const data = await response.json();
-        console.log({ data });
-        if (data.error) {
-          setMessages([]);
-        } else {
-          // Update the messages state with the fetched chat history
+        if (!data.error) {
           setMessages(data);
         }
       } catch (error) {
@@ -63,49 +47,24 @@ const Chat = () => {
       }
     };
 
-    // Ensure the socket is connected
-    if (socket && sellerName && username) {
-      // Join a room based on the sellerName and username
-      socket.emit("join", { senderId: username, receiverId: sellerName });
-
-      // Listen for received messages
-      socket.on("receiveMessage", (data) => {
-        setMessages((prevMessages) => [...prevMessages, data.message]);
-      });
-
-      // Fetch chat history when the component mounts
+    if (socket) {
       fetchData();
     }
-
-    // Clean up socket on component unmount
-    return () => {
-      if (socket) {
-        socket.disconnect();
-      }
-    };
-  }, [socket, sellerName, username]);
+  }, [socket, senderName, receiverName]);
 
   const sendMessage = () => {
     if (socket && message.trim() !== "") {
-      // Emit the message to the server
       socket.emit("sendMessage", {
-        senderId: username,
-        receiverId: sellerName,
+        senderId: senderName,
+        receiverId: receiverName,
         message: { text: message },
       });
 
-      // Add the sent message to the local state
-      // setMessages((prevMessages) => [
-      //   ...prevMessages,
-      //   { sender: username, content: message },
-      // ]);
-
-      // Clear the input field
       setMessage("");
     }
   };
 
-  const isSender = (sender) => sender === username;
+  const isSender = (sender) => sender === senderName;
 
   useEffect(() => {
     scrollRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -126,7 +85,7 @@ const Chat = () => {
             }
           >
             <strong>
-              {msg.sender === userId ? user?.username : msg.sender}:{" "}
+              {msg.sender === userId ? user?.username : receiverName}:{" "}
             </strong>
             {msg.content}
           </div>
