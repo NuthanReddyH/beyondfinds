@@ -84,7 +84,7 @@ const getUserIdByUsername = async (username) => {
 const updateUser = async (req, res) => {
   const { username } = req.body; // Extract the username
   const updatedFields = req.body;
-
+    console.log({updatedFields})
   try {
     const user = await User.findOne({ username });
 
@@ -92,6 +92,7 @@ const updateUser = async (req, res) => {
       return res.status(404).json({ error: "User not found." });
     }
 
+    updatedFields.profile = updatedFields.profile || {};
     // Check if a file is uploaded and update the avatar field
     if (req.file) {
       const avatarPath = req.file.path;
@@ -100,9 +101,19 @@ const updateUser = async (req, res) => {
     }
 
     if (updatedFields.phone) {
-      updatedFields.profile = updatedFields.profile || {};
       updatedFields.profile.phone = updatedFields.phone;
     }
+
+    // Update first and last names, if provided
+    if (updatedFields.firstName) {
+      updatedFields.profile.firstName = updatedFields.firstName;
+    }
+
+    if (updatedFields.lastName) {
+      updatedFields.profile.lastName = updatedFields.lastName;
+    }
+
+
 
     // Handle password update with hashing if provided
     if (updatedFields.newPassword) {
@@ -111,7 +122,7 @@ const updateUser = async (req, res) => {
     }
 
     // Prevent certain fields from being updated
-    ['username', 'newPassword'].forEach(field => delete updatedFields[field]);
+    ['username'].forEach(field => delete updatedFields[field]);
 
     // Update user fields
     console.log({updatedFields})
@@ -133,6 +144,30 @@ const updateUser = async (req, res) => {
   }
   
 };
+
+const checkUserPassword = async (req, res) => {
+  const { username, password } = req.body;
+
+  try {
+    const user = await User.findOne({ username });
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found." });
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+
+    if (!isPasswordValid) {
+      return res.status(200).json({ isPasswordCorrect: false });
+    }
+
+    return res.status(200).json({ isPasswordCorrect: true });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Server error." });
+  }
+};
+
 
 const addToFavorites = async (req, res) => {
   const { userId, productId } = req.body;
@@ -268,5 +303,6 @@ module.exports = {
     addToFavorites,
     getUserIdByUsername,
     getUsernameFromUserId,
-    getConversations
+    getConversations,
+    checkUserPassword
 };

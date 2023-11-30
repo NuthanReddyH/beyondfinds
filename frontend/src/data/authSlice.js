@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { deleteUser, getUsers, getUsersCount, loginUser, updateUser, addToFavorites, getConversations, getUsernameById } from '../api/auth';
+import { deleteUser, getUsers, getUsersCount, loginUser, updateUser, addToFavorites, getConversations, getUsernameById, checkUserPassword } from '../api/auth';
 import axios from 'axios';
 
 export const addToFavoritesThunk = createAsyncThunk(
@@ -22,6 +22,18 @@ export const loginThunk = createAsyncThunk(
       return response;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.error || 'Login failed');
+    }
+  }
+);
+
+export const checkUserPasswordThunk = createAsyncThunk(
+  'auth/checkUserPassword',
+  async ({ username, password }, thunkAPI) => {
+    try {
+      const isPasswordCorrect = await checkUserPassword(username, password);
+      return { username, isPasswordCorrect };
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.error || 'Password check failed');
     }
   }
 );
@@ -112,7 +124,8 @@ export const authSlice = createSlice({
     error: null,
     isAdmin: false,
     conversations: {},
-    username: null
+    username: null,
+    isPasswordCorrect: false
   },
   reducers: {
     logout(state) {
@@ -243,6 +256,18 @@ export const authSlice = createSlice({
     [getUsernameByIdThunk.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload;
+    },
+    [checkUserPasswordThunk.pending]: (state) => {
+      state.loading = true;
+      state.error = null;
+    },
+    [checkUserPasswordThunk.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.isPasswordCorrect = action.payload.isPasswordCorrect;
+    },
+    [checkUserPasswordThunk.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload || 'Password check failed';
     },
   },
 });

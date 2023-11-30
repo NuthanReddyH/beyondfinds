@@ -77,6 +77,16 @@ export const getUsersCount = async () => {
   }
 };
 
+export const checkUserPassword = async (username, password) => {
+  try {
+    const response = await api.post('/auth/checkpassword', { username, password });
+    return response.data.isPasswordCorrect;
+  } catch (error) {
+    console.error({ error });
+    throw error;
+  }
+};
+
 export const deleteUser = async (userId) => {
   try {
     const response = await api.delete(`/auth/user/${userId}`); // Adjust the endpoint as necessary
