@@ -10,3 +10,9 @@
     padding: 8px;
     height: fit-content;
 }
+
+@media (max-width: 1199px){
+    .search{
+        width: 190px;
+    }
+}

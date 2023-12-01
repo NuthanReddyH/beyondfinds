@@ -71,9 +71,7 @@ const Home = () => {
                 duration: 0.6,  
                 ease: "easeOut", }}>Shop Smart, Sell Smarter</motion.h1>
         </div>
-        <div
-          style={{ marginTop: "8rem", marginBottom: "8rem", textAlign: "left" }}
-        >
+        <div style={{ textAlign: "left" }} className="margin-class">
           <Typography variant="h4" gutterBottom>
             Popular Products
           </Typography>
@@ -86,7 +84,7 @@ const Home = () => {
           </Grid>
         </div>
         <div
-          style={{ marginTop: "8rem", marginBottom: "8rem", textAlign: "left" }}
+          style={{ textAlign: "left" }} className="margin-class"
         >
           <Typography variant="h4" gutterBottom>
             Start Selling
@@ -105,7 +103,7 @@ const Home = () => {
           <button className="common-btn">Sell Now</button>
         </div>
         <div
-          style={{ marginTop: "8rem", marginBottom: "7rem", textAlign: "left" }}
+          style={{textAlign: "left" }} className="margin-class"
         >
           <Typography variant="h4" gutterBottom>
             You Might Also Like

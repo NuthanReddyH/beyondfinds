@@ -57,7 +57,15 @@ main {
 .css-1ygcj2i-MuiTableCell-root{
   font-weight: 700 !important;
 }
-
+@media (max-width: 1199px){  
+  .slick-next{
+    right: -25px !important;
+  }
+  
+  .slick-prev{
+    left: -25px !important;
+  }
+ }
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
