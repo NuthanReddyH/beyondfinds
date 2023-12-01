@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { deleteUser, getUsers, getUsersCount, loginUser, updateUser, addToFavorites, getConversations, getUsernameById, checkUserPassword } from '../api/auth';
+import { deleteUser, getUsers, getUsersCount, loginUser, updateUser, addToFavorites, getConversations, getUsernameById, checkUserPassword, sendOtp } from '../api/auth';
 import axios from 'axios';
 
 export const addToFavoritesThunk = createAsyncThunk(
@@ -34,6 +34,18 @@ export const checkUserPasswordThunk = createAsyncThunk(
       return { username, isPasswordCorrect };
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.error || 'Password check failed');
+    }
+  }
+);
+
+export const sendOtpThunk = createAsyncThunk(
+  'auth/sendOtp',
+  async (email, thunkAPI) => {
+    try {
+      const response = await sendOtp(email);
+      return response;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response?.data?.error || 'Sending OTP failed');
     }
   }
 );
@@ -125,7 +137,8 @@ export const authSlice = createSlice({
     isAdmin: false,
     conversations: {},
     username: null,
-    isPasswordCorrect: false
+    isPasswordCorrect: false,
+    otpStatus: null,
   },
   reducers: {
     logout(state) {
@@ -268,6 +281,18 @@ export const authSlice = createSlice({
     [checkUserPasswordThunk.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload || 'Password check failed';
+    },
+    [sendOtpThunk.pending]: (state) => {
+      state.loading = true;
+      state.error = null;
+    },
+    [sendOtpThunk.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.otpStatus = 'OTP sent successfully';
+    },
+    [sendOtpThunk.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
     },
   },
 });

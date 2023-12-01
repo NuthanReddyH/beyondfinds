@@ -17,6 +17,7 @@ import Favorites from "./components/Listings/Favorites";
 import Chat from "./components/Chat/Chat";
 import ListingDashboard from "./components/Admin/ListingDashboard";
 import ChatWindow from "./components/Chat/ChatWindow";
+import ForgotPassword from "./components/common/ForgotPassword";
 
 // Lazy-loaded components
 const Home = lazy(() => import("./components/Home/Home"));
@@ -61,6 +62,7 @@ function App() {
               <Route path="/listings" element={<ListingDashboard />} />
               <Route path="/chat" element={<ChatWindow />} />
               <Route path="/chat/:sellerName/:username" element={<Chat />} />
+              <Route path="/forgotpassword" element={<ForgotPassword />} />
               {/* Catch-all route for 404 errors */}
               <Route path="*" element={<ErrorPage />} />
             </Routes>

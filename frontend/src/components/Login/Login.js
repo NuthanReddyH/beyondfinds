@@ -16,7 +16,8 @@ import { Visibility, VisibilityOff, Close } from "@mui/icons-material";
 import loginImg from "../../assets/login.png";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { loginThunk } from "../../data/authSlice";
+import { loginThunk, sendOtpThunk } from "../../data/authSlice";
+import EmailModal from "../common/ForgotPassword";
 
 const theme = createTheme({
   typography: {
@@ -41,6 +42,8 @@ const Login = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [isError,setIsError] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+
   const navigate = useNavigate();
 
   const handleChange = (event) => {
@@ -52,6 +55,15 @@ const Login = () => {
     setShowPassword(!showPassword);
   };
 
+  
+  const handleOpenModal = () => {
+    setModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
+  };
+
   const handleSnackbarOpen = (message) => {
     setSnackbarMessage(message);
     setSnackbarOpen(true);
@@ -61,6 +73,12 @@ const Login = () => {
     setSnackbarOpen(false);
   };
 
+  const handleSendOTP = (email) => {
+    // Logic to send OTP to the email
+    console.log('Sending OTP to:', email);
+    dispatch(sendOtpThunk(email));
+  };
+  
   const handleSubmit = async (event) => {
     event.preventDefault();
     setErrors({});
@@ -162,9 +180,9 @@ const Login = () => {
               variant="body2"
               style={{ textAlign: "left", margin: "0.5rem 0" }}
             >
-              <Link to="#">Forgot password?</Link>
+              <Link onClick={handleOpenModal} to="#">Forgot password?</Link>
             </Typography>
-
+            <EmailModal open={modalOpen} handleClose={handleCloseModal} handleSendOTP={handleSendOTP} />
             <Button
               variant="contained"
               color="primary"

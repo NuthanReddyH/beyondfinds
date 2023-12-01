@@ -135,3 +135,14 @@ export const getUsernameById = async (userId) => {
     throw error;
   }
 };
+
+
+export const sendOtp = async (email) => {
+  try {
+    const response = await api.post('/auth/send-otp', { email });
+    return response.data;
+  } catch (error) {
+    console.error('Error in sendOtp:', error.response?.data?.error || error.message);
+    throw error;
+  }
+};
