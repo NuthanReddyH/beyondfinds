@@ -1,6 +1,8 @@
 const bcrypt = require('bcrypt');
 const User = require('../models/User');
 const {Product} = require('../models/Products');
+const otpGenerator = require('otp-generator');
+const transporter = require('../nodemailerConfig');
 const Conversation  = require('../models/Conversations');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
@@ -288,6 +290,53 @@ const getUsernameFromUserId = async (req, res) => {
   }
 };
 
+function generateNumericOTP(length) {
+  let otp = '';
+  for (let i = 0; i < length; i++) {
+      otp += Math.floor(Math.random() * 10).toString();
+  }
+  return otp;
+}
+
+
+
+const sendOtp = async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    const otp = generateNumericOTP(4);
+    const expirationTime = new Date();
+    expirationTime.setMinutes(expirationTime.getMinutes() + 10); // OTP expires in 10 minutes
+
+    // Save OTP to user
+    await User.updateOne(
+      { email },
+      {
+        otp: {
+          code: otp,
+          expiresAt: expirationTime,
+        },
+      }
+    );
+
+    const mailOptions = {
+      from: process.env.EMAIL_USERNAME,
+      to: email,
+      subject: 'Your OTP for Verification',
+      text: `Your OTP is: ${otp}`,
+    };
+    console.log({mailOptions})
+    console.log({transporter})
+    // Send email
+    await transporter.sendMail(mailOptions);
+    res.status(200).send({ message: 'OTP sent successfully.' });
+  } catch (error) {
+    console.error('Error in sendOtp:', error);
+    res.status(500).send({ error: 'Error sending OTP.' });
+  }
+};
+
+
 
 
 
@@ -304,5 +353,6 @@ module.exports = {
     getUserIdByUsername,
     getUsernameFromUserId,
     getConversations,
-    checkUserPassword
+    checkUserPassword,
+    sendOtp
 };
