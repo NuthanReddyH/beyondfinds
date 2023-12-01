@@ -20,16 +20,16 @@
   text-align: right;
   background-color: #a6e3e9;
   padding: 8px;
-  border-radius: 8px;
+  border-radius: 5px;
   margin: 10px;
 }
 
 .messageReceiver {
   display: inline-block;
   text-align: left;
-  background-color: #f0f0f0;
+  background-color: #F7F9FA;
   padding: 8px;
-  border-radius: 8px;
+  border-radius: 5px;
   margin: 10px;
 }
 
