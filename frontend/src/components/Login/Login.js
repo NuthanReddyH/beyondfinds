@@ -73,11 +73,29 @@ const Login = () => {
     setSnackbarOpen(false);
   };
 
-  const handleSendOTP = (email) => {
-    // Logic to send OTP to the email
+  const handleSendOTP = async (email) => {
     console.log('Sending OTP to:', email);
-    dispatch(sendOtpThunk(email));
+    
+    try {
+      const result = await dispatch(sendOtpThunk(email));
+      console.log({result})
+      if (result?.error) {
+        const errorMessage = result?.payload || "Error sending OTP.";
+        setIsError(true);
+        handleSnackbarOpen(errorMessage);
+      } else {
+        setIsError(false);
+        handleSnackbarOpen("OTP sent successfully.");
+        navigate('/otp', { state: { email: email, otp: result?.payload?.otp } });
+
+      }
+    } catch (error) {
+      console.error('Error in handleSendOTP:', error);
+      setIsError(true);
+      handleSnackbarOpen("An unexpected error occurred.");
+    }
   };
+  
   
   const handleSubmit = async (event) => {
     event.preventDefault();

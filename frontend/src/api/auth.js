@@ -136,6 +136,17 @@ export const getUsernameById = async (userId) => {
   }
 };
 
+export const getUsernameByEmail = async (email) => {
+  try {
+    const response = await api.post('/auth/username', { email });
+    return response.data.username;
+  } catch (error) {
+    console.error({ error });
+    throw error;
+  }
+};
+
+
 
 export const sendOtp = async (email) => {
   try {
