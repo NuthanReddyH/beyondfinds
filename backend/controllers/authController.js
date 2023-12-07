@@ -1,6 +1,8 @@
 const bcrypt = require('bcrypt');
 const User = require('../models/User');
 const {Product} = require('../models/Products');
+const otpGenerator = require('otp-generator');
+const transporter = require('../nodemailerConfig');
 const Conversation  = require('../models/Conversations');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
@@ -84,7 +86,7 @@ const getUserIdByUsername = async (username) => {
 const updateUser = async (req, res) => {
   const { username } = req.body; // Extract the username
   const updatedFields = req.body;
-
+    console.log({updatedFields})
   try {
     const user = await User.findOne({ username });
 
@@ -92,6 +94,7 @@ const updateUser = async (req, res) => {
       return res.status(404).json({ error: "User not found." });
     }
 
+    updatedFields.profile = updatedFields.profile || {};
     // Check if a file is uploaded and update the avatar field
     if (req.file) {
       const avatarPath = req.file.path;
@@ -100,9 +103,19 @@ const updateUser = async (req, res) => {
     }
 
     if (updatedFields.phone) {
-      updatedFields.profile = updatedFields.profile || {};
       updatedFields.profile.phone = updatedFields.phone;
     }
+
+    // Update first and last names, if provided
+    if (updatedFields.firstName) {
+      updatedFields.profile.firstName = updatedFields.firstName;
+    }
+
+    if (updatedFields.lastName) {
+      updatedFields.profile.lastName = updatedFields.lastName;
+    }
+
+
 
     // Handle password update with hashing if provided
     if (updatedFields.newPassword) {
@@ -111,7 +124,7 @@ const updateUser = async (req, res) => {
     }
 
     // Prevent certain fields from being updated
-    ['username', 'newPassword'].forEach(field => delete updatedFields[field]);
+    ['username'].forEach(field => delete updatedFields[field]);
 
     // Update user fields
     console.log({updatedFields})
@@ -133,6 +146,30 @@ const updateUser = async (req, res) => {
   }
   
 };
+
+const checkUserPassword = async (req, res) => {
+  const { username, password } = req.body;
+
+  try {
+    const user = await User.findOne({ username });
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found." });
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+
+    if (!isPasswordValid) {
+      return res.status(200).json({ isPasswordCorrect: false });
+    }
+
+    return res.status(200).json({ isPasswordCorrect: true });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Server error." });
+  }
+};
+
 
 const addToFavorites = async (req, res) => {
   const { userId, productId } = req.body;
@@ -253,6 +290,73 @@ const getUsernameFromUserId = async (req, res) => {
   }
 };
 
+const getUsernameFromEmail = async (req, res) => {
+  const { email } = req.body;
+  try {
+    const user = await User.findOne({ email: email });
+    if (!user) {
+      return res.status(404).json({ error: "User not found." });
+    }
+
+    return res.status(200).json({ username: user.username });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Server error while retrieving username." });
+  }
+};
+
+
+function generateNumericOTP(length) {
+  let otp = '';
+  for (let i = 0; i < length; i++) {
+      otp += Math.floor(Math.random() * 10).toString();
+  }
+  return otp;
+}
+
+
+
+const sendOtp = async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).send({ error: 'Email not found.' });
+    }
+    const otp = generateNumericOTP(4);
+    const expirationTime = new Date();
+    expirationTime.setMinutes(expirationTime.getMinutes() + 10); // OTP expires in 10 minutes
+
+    // Save OTP to user
+    await User.updateOne(
+      { email },
+      {
+        otp: {
+          code: otp,
+          expiresAt: expirationTime,
+        },
+      }
+    );
+
+    const mailOptions = {
+      from: process.env.EMAIL_USERNAME,
+      to: email,
+      subject: 'Your OTP for Verification',
+      text: `Your OTP is: ${otp}`,
+    };
+    console.log({mailOptions})
+    console.log({transporter})
+    // Send email
+    await transporter.sendMail(mailOptions);
+    res.status(200).send({ message: 'OTP sent successfully.' , otp: otp});
+  } catch (error) {
+    console.error('Error in sendOtp:', error);
+    res.status(500).send({ error: 'Error sending OTP.' });
+  }
+};
+
+
 
 
 
@@ -268,5 +372,8 @@ module.exports = {
     addToFavorites,
     getUserIdByUsername,
     getUsernameFromUserId,
-    getConversations
+    getConversations,
+    checkUserPassword,
+    sendOtp,
+    getUsernameFromEmail
 };

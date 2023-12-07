@@ -85,7 +85,7 @@ const Chat = ({receiver}) => {
             }
           >
             <strong>
-              {msg.sender === userId ? user?.username : receiverName}:{" "}
+              {msg.sender === userId ? `${user?.profile?.firstName} ${user?.profile?.lastName}` : receiverName}:{" "}
             </strong>
             {msg.content}
           </div>

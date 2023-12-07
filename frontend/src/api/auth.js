@@ -77,6 +77,16 @@ export const getUsersCount = async () => {
   }
 };
 
+export const checkUserPassword = async (username, password) => {
+  try {
+    const response = await api.post('/auth/checkpassword', { username, password });
+    return response.data.isPasswordCorrect;
+  } catch (error) {
+    console.error({ error });
+    throw error;
+  }
+};
+
 export const deleteUser = async (userId) => {
   try {
     const response = await api.delete(`/auth/user/${userId}`); // Adjust the endpoint as necessary
@@ -122,6 +132,28 @@ export const getUsernameById = async (userId) => {
     return response.data.username;
   } catch (error) {
     console.error({ error });
+    throw error;
+  }
+};
+
+export const getUsernameByEmail = async (email) => {
+  try {
+    const response = await api.post('/auth/username', { email });
+    return response.data.username;
+  } catch (error) {
+    console.error({ error });
+    throw error;
+  }
+};
+
+
+
+export const sendOtp = async (email) => {
+  try {
+    const response = await api.post('/auth/send-otp', { email });
+    return response.data;
+  } catch (error) {
+    console.error('Error in sendOtp:', error.response?.data?.error || error.message);
     throw error;
   }
 };

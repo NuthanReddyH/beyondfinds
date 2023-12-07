@@ -73,6 +73,10 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
+    otp: {
+      code: String,
+      expiresAt: Date,
+    },
     favorites: [
       {
         type: Schema.Types.ObjectId,
