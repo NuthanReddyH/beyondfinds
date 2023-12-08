@@ -67,6 +67,17 @@ export const getUsers = async () => {
   }
 };
 
+export const getUserById = async (userId) => {
+  try {
+    const response = await api.get(`/auth/user/id/${userId}`);
+    return response.data;
+  } catch (error) {
+    console.error({ error });
+    throw error;
+  }
+};
+
+
 export const getUsersCount = async () => {
   try {
     const response = await api.get('/auth/users/count'); 

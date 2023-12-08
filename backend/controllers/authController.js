@@ -32,6 +32,23 @@ const login = async (req, res) => {
   }
 };
 
+const getUserById = async (req, res) => {
+  const userId = req.params.userId;
+
+  try {
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found." });
+    }
+
+    return res.status(200).json(user);
+  } catch (error) {
+    console.error('Error fetching user by ID:', error);
+    return res.status(500).json({ error: "Server error while retrieving user." });
+  }
+};
+
 
 const register = async (req, res) => {
   const { username, email, password, confirmPassword } = req.body;
@@ -71,7 +88,6 @@ const register = async (req, res) => {
 const getUserIdByUsername = async (username) => {
   try {
     const user = await User.findOne({ username });
-
     if (!user) {
       return null; // Return null if the user with the given username is not found
     }
@@ -290,6 +306,23 @@ const getUsernameFromUserId = async (req, res) => {
   }
 };
 
+const getUserIdFromUsername = async (req, res) => {
+  const username = req.params.username;
+  try {
+    const user = await User.findOne({ username: username });
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found." });
+    }
+
+    return res.status(200).json({ userId: user._id });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Server error while retrieving user ID." });
+  }
+};
+
+
 const getUsernameFromEmail = async (req, res) => {
   const { email } = req.body;
   try {
@@ -375,5 +408,7 @@ module.exports = {
     getConversations,
     checkUserPassword,
     sendOtp,
-    getUsernameFromEmail
+    getUsernameFromEmail,
+    getUserIdFromUsername,
+    getUserById
 };

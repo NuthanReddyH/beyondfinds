@@ -16,11 +16,6 @@ chatRouter.get('/getMessages/:senderId/:receiverId', async (req, res) => {
       if (conversation) {
         const messageIds = conversation.messages; 
         const messages = await chatController.getMessagesByIds(messageIds);// Assuming conversation.messages is an array of message IDs
-        // const messages = await Promise.all(messageIds.map(async messageId => {
-        //   const message = await chatController.getMessagesByIds(messageId);
-        //   console.log({message})
-        //   return message;
-        // }));
         console.log({messages})
         return res.status(200).json(messages);
       } else {
@@ -30,6 +25,19 @@ chatRouter.get('/getMessages/:senderId/:receiverId', async (req, res) => {
       console.error('Error fetching messages:', error);
       return res.status(500).json({ error: "Server error while fetching messages." });
     }
-  });
+});
+
+chatRouter.delete('/deleteChat/:participant1Id/:participant2Id', async (req, res) => {
+  const { participant1Id, participant2Id } = req.params;
+  
+  try {
+    const result = await chatController.deleteChat(participant1Id, participant2Id);
+    return res.status(200).json(result);
+  } catch (error) {
+    console.error('Error deleting chat:', error);
+    return res.status(500).json({ error: "Server error while deleting chat." });
+  }
+});
+
   
 module.exports = chatRouter;

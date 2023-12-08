@@ -58,7 +58,6 @@ function App() {
               <Route path="/addListing" element={<AddListing />} />
               <Route path="/myListings" element={<MyListings />} />
               <Route path="/favorites" element={<Favorites />} />
-              {/* Admin Routes */}
               <Route path="/admin" element={<Dashboard />} />
               <Route path="/users" element={<UserDashboard />} />
               <Route path="/listings" element={<ListingDashboard />} />

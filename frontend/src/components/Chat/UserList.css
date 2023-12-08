@@ -12,6 +12,7 @@
     transition: background-color 0.2s;
     display: flex;
     align-items: center;
+    justify-content: space-between;
 }
 .userName {
     padding-left: 20px;
@@ -19,4 +20,9 @@
 
 .userListItem:hover {
     background-color: #f0f0f0;
+}
+
+.user-container {
+    display: flex;
+    align-items: center;
 }

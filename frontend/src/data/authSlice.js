@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { deleteUser, getUsers, getUsersCount, loginUser, updateUser, addToFavorites, getConversations, getUsernameById, checkUserPassword, sendOtp } from '../api/auth';
+import { deleteUser, getUsers, getUsersCount, loginUser, updateUser, addToFavorites, getConversations, getUsernameById, checkUserPassword, sendOtp, getUserById } from '../api/auth';
 import axios from 'axios';
 
 export const addToFavoritesThunk = createAsyncThunk(
@@ -121,6 +121,18 @@ export const getUsernameByIdThunk = createAsyncThunk(
       return response;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data.error || 'Could not fetch username');
+    }
+  }
+);
+
+export const getUserByIdThunk = createAsyncThunk(
+  'auth/getUserById',
+  async (userId, thunkAPI) => {
+    try {
+      const response = await getUserById(userId);
+      return response;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.error || 'Could not fetch user details');
     }
   }
 );
@@ -293,6 +305,19 @@ export const authSlice = createSlice({
     [sendOtpThunk.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload;
+    },
+    [getUserByIdThunk.pending]: (state) => {
+      state.loading = true;
+      state.error = null;
+    },
+    [getUserByIdThunk.fulfilled]: (state, action) => {
+      state.user = action.payload;
+      state.loading = false;
+      state.error = null;
+    },
+    [getUserByIdThunk.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload || 'Could not fetch user details';
     },
   },
 });
