@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./Header.css";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -19,9 +19,16 @@ const Header = () => {
   const { isAuthenticated, user } = useSelector((state) => state.auth);
   const { categories } = useSelector((state) => state.products || []);
   const navigate = useNavigate();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   useEffect(() => {
     dispatch(fetchCategories());
   }, [dispatch]);
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -41,7 +48,7 @@ const Header = () => {
               className="self-center h-10 w-auto"
             />
           </Link>
-          <div className="flex space-x-4 ml-auto items-center mobile-menu">
+          <div className={`flex space-x-4 ml-auto items-center mobile-menu ${isMenuOpen ? 'menu-open' : ''}`}>
           {isAuthenticated ? (
               <>
                 <Link to="/favorites">
@@ -66,7 +73,7 @@ const Header = () => {
                 </Link>
               </>
             )}
-            <div className="menu-bar">
+            <div className="menu-bar" onClick={toggleMenu}>
               <span className="bar"></span>
               <span className="bar"></span>
               <span className="bar"></span>
