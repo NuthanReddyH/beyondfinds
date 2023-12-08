@@ -73,8 +73,40 @@ const saveMessageToDB = async ({ senderId, receiverId, content }) => {
   }
 };
 
+
+const deleteChat = async (participant1Id, participant2Id) => {
+  try {
+    // Find the conversation by participants
+    const conversation = await Conversation.findOne({
+      participants: { $all: [participant1Id, participant2Id] },
+    });
+
+    if (!conversation) {
+      throw new Error('Conversation not found.');
+    }
+
+    // Delete all messages associated with the conversation
+    await Message.deleteMany({ _id: { $in: conversation.messages } });
+
+    // Remove the conversation reference from both users' chat history
+    await User.updateMany(
+      { _id: { $in: [participant1Id, participant2Id] } },
+      { $pull: { chatHistory: conversation._id } }
+    );
+
+    // Delete the conversation itself
+    await Conversation.deleteOne({ _id: conversation._id });
+
+    return { message: 'Chat deleted successfully.' };
+  } catch (error) {
+    console.error('Error deleting chat:', error);
+    throw error;
+  }
+};
+
 module.exports = {
   saveMessageToDB,
   getConversationByParticipants,
   getMessagesByIds,
+  deleteChat
 };
