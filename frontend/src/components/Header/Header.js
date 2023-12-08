@@ -99,7 +99,7 @@ const Header = () => {
                     </Link>
                   </li>
                   {categories?.map((category) => (
-                    <li key={category._id}>
+                    <li key={category._id} onClick={toggleMenu}>
                       <Link
                         to={`/category/${category.name}/${category._id}`}
                         className="hover:text-gray-700 focus:outline-none"
