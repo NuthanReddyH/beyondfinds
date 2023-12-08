@@ -73,4 +73,13 @@
     box-shadow: 0px 1px 6px rgba(1, 1, 6, 0.08);
     border: 1px solid #F7F9FA;
   }
+
+  @media (max-width: 991px){
+    .subcategory-item .icon {
+      height: 65px;
+    }
+    .subcategory-item h6{
+      font-size: 18px !important;
+    }
+  }
   

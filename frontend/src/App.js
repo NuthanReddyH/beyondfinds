@@ -46,7 +46,7 @@ function App() {
       <Router>
         <Suspense fallback={<Loader />}>
           {!!isAdmin ? <AdminHeader /> : <Header />}
-          <main className="container mx-auto lg:px-16 sm:px-8">
+          <main className="container mx-auto lg:px-16 sm:p-8">
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />

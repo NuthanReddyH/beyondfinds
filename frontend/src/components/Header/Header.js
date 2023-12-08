@@ -40,7 +40,8 @@ const Header = () => {
   return (
     <div>
       <nav className="bg-white">
-        <div className="container flex items-center justify-between mx-auto py-4 lg:px-16 sm:px-8">
+        <div className={`menu-wrapper ${isMenuOpen ? 'menu-open' : ''}`}>
+        <div className="container flex items-center justify-between mx-auto py-4 lg:px-16 sm:p-8">
           <Link to="/" className="flex items-center">
             <img
               src={companyLogo}
@@ -48,7 +49,11 @@ const Header = () => {
               className="self-center h-10 w-auto"
             />
           </Link>
-          <div className={`flex space-x-4 ml-auto items-center mobile-menu ${isMenuOpen ? 'menu-open' : ''}`}>
+          <div className="flex space-x-4 ml-auto items-center mobile-menu">
+            <div className="main-search">
+          <SearchComponent />
+
+            </div>
           {isAuthenticated ? (
               <>
                 <Link to="/favorites">
@@ -78,36 +83,39 @@ const Header = () => {
               <span className="bar"></span>
               <span className="bar"></span>
             </div>
-            <div className="menu-open">
-            <SearchComponent />
-            {showCategoryLinks && (
-        <div className="bottom-nav bg-gray-100 py-4">
-          <ul className="flex justify-between container mx-auto lg:px-16 sm:px-8">
-            <li>
-              <Link
-                to={`/products`}
-                className="hover:text-gray-700 focus:outline-none"
-              >
-                All
-              </Link>
-            </li>
-            {categories?.map((category) => (
-              <li key={category._id}>
-                <Link
-                  to={`/category/${category.name}/${category._id}`}
-                  className="hover:text-gray-700 focus:outline-none ml-2"
-                >
-                  {category.name}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
             </div>
+            </div>
+            
+            <div className="side-menu">
+            {showCategoryLinks && (
+              <div className="bottom-nav py-4">
+                <ul className="flex flex-wrap container mx-auto lg:px-16 sm:px-8">
+                  <li>
+                    <Link
+                      to={`/products`}
+                      className="hover:text-gray-700 focus:outline-none"
+                    >
+                      All
+                    </Link>
+                  </li>
+                  {categories?.map((category) => (
+                    <li key={category._id}>
+                      <Link
+                        to={`/category/${category.name}/${category._id}`}
+                        className="hover:text-gray-700 focus:outline-none"
+                      >
+                        {category.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+      
+      <SearchComponent />
           </div>
 
-          <div className="flex space-x-4 ml-auto items-center main-menu">
+          {/* <div className="flex space-x-4 ml-auto items-center main-menu">
             <SearchComponent />
             {isAuthenticated ? (
               <>
@@ -133,7 +141,7 @@ const Header = () => {
                 </Link>
               </>
             )}
-          </div>
+          </div> */}
         </div>
       </nav>
       {showCategoryLinks && (

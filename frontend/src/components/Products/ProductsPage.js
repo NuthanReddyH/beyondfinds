@@ -119,7 +119,7 @@ const ProductsPage = () => {
 
       <div
         style={{ marginTop: "8rem", marginBottom: "8rem", textAlign: "left" }}
-      >
+       className="extra-padding">
         <div
           style={{
             display: "flex",

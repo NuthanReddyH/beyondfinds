@@ -108,8 +108,8 @@ const IndividualCategory = () => {
     return subcategories.map((sub) => (
       <Grid
         item
-        xs={12}
-        sm={6}
+        xs={3}
+        sm={3}
         md={4}
         lg={3}
         key={sub.id}
@@ -168,7 +168,7 @@ const IndividualCategory = () => {
         </Grid>
       </div>
 
-      <div
+      <div className="extra-padding"
         style={{ marginTop: "8rem", marginBottom: "8rem", textAlign: "left" }}
       >
         <div

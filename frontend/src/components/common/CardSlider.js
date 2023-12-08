@@ -28,10 +28,10 @@ export const CardSlider = ({ products }) => {
     dots: false,
     arrow: true,
     infinite: true,
-    speed: 500,
+    speed: 600,
     slidesToShow: 5,
     slidesToScroll: 1,
-    autoplay: false,
+    autoplay: true,
     autoplaySpeed: 1000,
     responsive: [
       {
@@ -50,6 +50,7 @@ export const CardSlider = ({ products }) => {
         breakpoint: 767,
         settings: {
           slidesToShow: 1,
+          arrow: false,
         }
       }
     ],
