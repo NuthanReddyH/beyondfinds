@@ -1,0 +1,135 @@
+.about-us {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 1200px;
+    margin: auto;
+    padding: 20px;
+  }
+  
+  .about-us h1 {
+    font-size: 2.5em; /* Increase the size of the header */
+    font-weight: bold; /* Make the header bold */
+    color: #333;
+    margin-bottom: 1em; /* Add space below the header */
+    text-align: center; /* Center the header */
+  }
+  
+  .about-section {
+    display: flex;
+    width: 100%; /* Full width to use all available space */
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 40px; /* Add space below the section */
+  }
+  
+  .image-content {
+    flex: 1; /* Take up half the space */
+    text-align: left; /* Align the image to the left */
+  }
+  
+  .image-content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px; /* Optional style for rounded corners */
+  }
+  
+  .text-content {
+    flex: 1; /* Take up the remaining half */
+    padding-left: 20px; /* Add some space between the text and the image */
+  }
+  
+  .text-content h2 {
+    font-size: 2em; /* Slightly smaller than the main header */
+    color: #555;
+    margin-bottom: 0.5em;
+  }
+  
+  .text-content p {
+    color: #666;
+    line-height: 1.6;
+  }
+  
+  /* Responsive design adjustments for smaller screens */
+  @media (max-width: 768px) {
+    .about-section {
+      flex-direction: column; /* Stack image and text on top of each other */
+    }
+  
+    .image-content, .text-content {
+      flex: none; /* Reset flex settings */
+      max-width: 100%; /* Full width */
+      padding: 0; /* Reset padding */
+      text-align: center; /* Center-align the text */
+    }
+  
+    .text-content {
+      padding-top: 20px; /* Add space between the image and text */
+    }
+  }
+
+  .what-we-do {
+    width: 100%;
+    text-align: center;
+    margin: 50px 0;
+  }
+  
+  .what-we-do h2 {
+    font-size: 2em;
+    color: #333;
+    margin-bottom: 1em;
+  }
+  
+  .three-columns {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start; /* Align items to the top */
+    margin-top: 20px;
+  }
+  
+  .column {
+    flex-basis: calc(33.333% - 20px); /* Subtract margin from flex-basis */
+    margin: 0 10px;
+    display: flex; /* Set display to flex */
+    flex-direction: column; /* Stack items vertically */
+    align-items: center; /* Center items horizontally */
+  }
+  
+  .column img {
+    width: 100%; /* Full width within column */
+    max-width: 180px; /* Maximum width for the image */
+    margin-bottom: 15px;
+    border-radius: 8px;
+  }
+  
+  .column h3 {
+    font-size: 1.2em; /* Adjust font size as needed */
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  
+  .column p {
+    text-align: left; /* Align text to the left */
+    color: #666;
+    line-height: 1.6;
+    max-width: 100%; /* Ensure text doesn't overflow column */
+  }
+  
+  /* Responsive design adjustments for smaller screens */
+  @media (max-width: 768px) {
+    .three-columns {
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .column {
+      max-width: 100%; /* Allow each column to fill the width */
+      margin-bottom: 20px; /* Add space between stacked columns */
+    }
+  
+    .column p {
+      text-align: center; /* Center text for mobile */
+    }
+  }
+  
