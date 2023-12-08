@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./Header.css";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -19,9 +19,16 @@ const Header = () => {
   const { isAuthenticated, user } = useSelector((state) => state.auth);
   const { categories } = useSelector((state) => state.products || []);
   const navigate = useNavigate();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   useEffect(() => {
     dispatch(fetchCategories());
   }, [dispatch]);
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -33,7 +40,8 @@ const Header = () => {
   return (
     <div>
       <nav className="bg-white">
-        <div className="container flex items-center justify-between mx-auto py-4 lg:px-16 sm:px-8">
+        <div className={`menu-wrapper ${isMenuOpen ? 'menu-open' : ''}`}>
+        <div className="container flex items-center justify-between mx-auto py-4 lg:px-16 sm:p-8">
           <Link to="/" className="flex items-center">
             <img
               src={companyLogo}
@@ -41,8 +49,73 @@ const Header = () => {
               className="self-center h-10 w-auto"
             />
           </Link>
+          <div className="flex space-x-4 ml-auto items-center mobile-menu">
+            <div className="main-search">
+          <SearchComponent />
 
-          <div className="flex space-x-4 ml-auto items-center">
+            </div>
+          {isAuthenticated ? (
+              <>
+                <Link to="/favorites">
+                  <IconButton color="inherit">
+                    <FavoriteBorder />
+                  </IconButton>
+                </Link>
+                <Link to="/chat">
+                  <IconButton color="inherit">
+                    <MessageIcon />
+                  </IconButton>
+                </Link>
+                <AccountMenu user={user} handleLogout={handleLogout} />
+              </>
+            ) : (
+              <>
+                <Link
+                  to="/login"
+                  className="text-gray-500 hover:text-gray-700 focus:outline-none mt-1"
+                >
+                  Login
+                </Link>
+              </>
+            )}
+            <div className="menu-bar" onClick={toggleMenu}>
+              <span className="bar"></span>
+              <span className="bar"></span>
+              <span className="bar"></span>
+            </div>
+            </div>
+            </div>
+            
+            <div className="side-menu">
+            {showCategoryLinks && (
+              <div className="bottom-nav py-4">
+                <ul className="flex flex-wrap container mx-auto lg:px-16 sm:px-8">
+                  <li>
+                    <Link
+                      to={`/products`}
+                      className="hover:text-gray-700 focus:outline-none"
+                    >
+                      All
+                    </Link>
+                  </li>
+                  {categories?.map((category) => (
+                    <li key={category._id} onClick={toggleMenu}>
+                      <Link
+                        to={`/category/${category.name}/${category._id}`}
+                        className="hover:text-gray-700 focus:outline-none"
+                      >
+                        {category.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+      
+      <SearchComponent />
+          </div>
+
+          {/* <div className="flex space-x-4 ml-auto items-center main-menu">
             <SearchComponent />
             {isAuthenticated ? (
               <>
@@ -68,11 +141,11 @@ const Header = () => {
                 </Link>
               </>
             )}
-          </div>
+          </div> */}
         </div>
       </nav>
       {showCategoryLinks && (
-        <div className="bottom-nav bg-gray-100 py-4">
+        <div className="bottom-nav bg-gray-100 py-4 main-menu">
           <ul className="flex justify-between container mx-auto lg:px-16 sm:px-8">
             <li>
               <Link

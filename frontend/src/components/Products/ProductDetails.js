@@ -180,15 +180,15 @@ function ProductDetails() {
         </Link>
         / {product.title}
       </div>
-      <div style={productStyles.container}>
-        <div style={productStyles.imageContainer}>
+      <div style={productStyles.container} className="flex-content">
+        <div style={productStyles.imageContainer} className="flex-content-image">
           <img
             style={productStyles.productImage}
             src={getImageData(product.productImage)}
             alt={product.title}
           />
         </div>
-        <div style={productStyles.content}>
+        <div style={productStyles.content} className="flex-content-text">
           <div className="flex items-center justify-between">
             <h2 style={productStyles.title}>{product.title}</h2>
             <div style={{ textAlign: "center", marginTop: "20px" }}>
@@ -213,7 +213,7 @@ function ProductDetails() {
         /> */}
           <p style={productStyles.location}>{product.location}</p>
 
-          <div style={productStyles.sellerInfo}>
+          <div style={productStyles.sellerInfo} className="seller">
             <h3 style={productStyles.sellerInfoHeader}>Seller Information</h3>
             <div style={productStyles.sellerDetails}>
               <div style={productStyles.avatarImg}>

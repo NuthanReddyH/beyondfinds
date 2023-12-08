@@ -95,7 +95,7 @@ const Register = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <div
+      <div className="form-wrapper"
         style={{
           display: "flex",
           justifyContent: "center",

@@ -5,8 +5,8 @@ const Footer = () => {
   return (
     <footer>
       <div className=" container mx-auto py-8 lg:px-16 sm:px-8">
-        <div className="flex justify-between text-left">
-          <div>
+        <div className="flex justify-between text-left small-screen">
+          <div className="footer-item">
             <h5 className="mb-2.5 font-bold">Shop</h5>
 
             <ul className="mb-0 list-none">
@@ -25,7 +25,7 @@ const Footer = () => {
             </ul>
           </div>
 
-          <div>
+          <div className="footer-item">
             <h5 className="mb-2.5 font-bold">Categories</h5>
 
             <ul className="mb-0 list-none">
@@ -44,7 +44,7 @@ const Footer = () => {
             </ul>
           </div>
 
-          <div >
+          <div className="footer-item">
             <h5 className="mb-2.5 font-bold">Account</h5>
 
             <ul className="mb-0 list-none">

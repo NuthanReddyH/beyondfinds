@@ -65,6 +65,103 @@ main {
   .slick-prev{
     left: -25px !important;
   }
+  
+ }
+ @media (max-width: 767px){
+  h4{
+      font-size: 24px !important;
+  }
+  h2{
+    font-size: 24px !important;
+  }
+  .slick-next{
+    display: none !important;
+  }
+  
+  .slick-prev{
+    display: none !important;
+  }
+  footer{
+    padding: 0 20px;
+}
+footer .small-screen{
+    flex-wrap: wrap;
+    text-align: center !important;
+}
+footer .footer-item{
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.extra-padding{
+  margin-top: 30px !important;
+  margin-bottom: 30px !important;
+  padding: 0 20px;
+}
+
+.form-wrapper{
+  flex-wrap: wrap;
+}
+
+.form-wrapper img{
+  width: 100% !important;
+}
+.form-wrapper form{
+  margin: 30px 0;
+}
+.form-wrapper form input{
+  padding: 8px !important;
+}
+
+.listing-upload{
+  display: flex;
+  flex-wrap: wrap;
+}
+.listing-upload .file-upload{
+  width: 100%;
+}
+.listing-upload form{
+  width: 100%;
+}
+.listing-upload .file-data{
+  width: 100% !important;
+}
+
+.flex-content{
+  display: flex;
+  flex-wrap: wrap;
+}
+.flex-content .flex-content-image{
+  width: 100%;
+}
+.flex-content .flex-content-text{
+  width: 100%;
+}
+.flex-content .flex-content-text p{
+  margin-left: 0 !important;
+}
+.flex-content .flex-content-text h2{
+  margin-left: 0 !important;
+}
+.seller{
+  margin-left: 0 !important;
+}
+
+.chatWindow{
+  flex-wrap: wrap;
+}
+.userListSection{
+  width: 100%;
+}
+.messenger{
+  height: 30vh;
+}
+.chatWindow{
+  height: 50vh;
+}
+.chatSection{
+  width: 100%;
+}
  }
 
 @media (prefers-reduced-motion: no-preference) {

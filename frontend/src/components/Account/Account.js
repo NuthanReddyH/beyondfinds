@@ -51,10 +51,11 @@ function Profile() {
     );
   };
   return (
-    <Box
+    <Box className="profile-wrapper"
       sx={{ flexGrow: 1, display: "flex", height: "100%", marginTop: "20px" }}
     >
       <Tabs
+      className="profile-menu"
         orientation="vertical"
         variant="scrollable"
         value={selectedTab}
@@ -71,7 +72,7 @@ function Profile() {
       <TabPanel
         value={selectedTab}
         index={1}
-        className="tabpanel"
+        className="tabpanel full-width"
         style={{ width: "50%" }}
       >
         <UpdatePassword user={user} handleSnackBarOpen={handleSnackbarOpen} />

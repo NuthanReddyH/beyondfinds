@@ -130,8 +130,9 @@ function AddListing() {
 
 
   return (
-    <Box display="flex" justifyContent="center" p={2}>
+    <Box display="flex" justifyContent="center" p={2} className="listing-upload">
       <Box
+      className="file-upload"
         width="50%"
         p={1}
         style={{
@@ -140,19 +141,19 @@ function AddListing() {
           alignItems: "center",
         }}
       >
-        <FileUploadButton onFileSelect={handleFileChange} />
+        <FileUploadButton onFileSelect={handleFileChange}  />
         {productImage && (
-  <Box
-    sx={{
-      width: '100%', 
-      height: '200px', 
-      overflow: 'hidden',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      borderRadius: '4px', 
-    }}
-  >
+        <Box 
+          sx={{
+            width: '100%', 
+            height: '200px', 
+            overflow: 'hidden',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderRadius: '4px', 
+          }}
+        >
     <img
       src={URL.createObjectURL(productImage)}
       alt="Preview"
@@ -167,7 +168,7 @@ function AddListing() {
 )}
 
       </Box>
-      <Box width="50%" p={1}>
+      <Box width="50%" p={1} className="file-data">
         <Typography variant="h6">Add New Product</Typography>
         <form onSubmit={handleSubmit}>
           <TextField

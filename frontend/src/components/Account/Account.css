@@ -35,3 +35,16 @@
     margin-top: 20px !important;
     background-color: #23B0BE !important;
 }
+
+@media (max-width: 991px){
+    .profile-wrapper{
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .profile-menu{
+        width: 100%;
+    }
+    .tabpanel.full-width{
+        width: 100%;
+    }
+}
