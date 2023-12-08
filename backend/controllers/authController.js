@@ -217,7 +217,8 @@ const getUsers = async (req, res) => {
     const userDtos = users.map(user => ({
       id: user._id,
       username: user.username,
-      email: user.email
+      email: user.email,
+      createdAt: user.createdAt
       // Do not send back sensitive data like passwords!
     }));
     return res.status(200).json(userDtos);
