@@ -21,6 +21,7 @@ import ForgotPassword from "./components/common/ForgotPassword";
 import OtpPage from "./components/Login/OtpPage";
 import ResetPassword from "./components/Login/ResetPassword";
 import AboutUs from "./components/About/About";
+import ContactUs from "./components/ContactUs/ContactUs";
 
 // Lazy-loaded components
 const Home = lazy(() => import("./components/Home/Home"));
@@ -51,6 +52,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/AboutUs" element={<AboutUs />} />
+              <Route path="/ContactUs" element={<ContactUs />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/myAccount" element={<Account />} />
