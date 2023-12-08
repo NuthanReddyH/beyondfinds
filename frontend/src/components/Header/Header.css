@@ -9,10 +9,36 @@
     background-color: #f3f4f6;
     padding: 8px;
     height: fit-content;
+    display: flex;
+    align-items: center;
 }
 
 @media (max-width: 1199px){
-    .search{
+    .search-wrapper{
         width: 190px;
+    }
+
+    .search-input{
+        width: 155px !important;
+    }
+    
+}
+
+@media (max-width: 991px){
+    .main-menu{
+        display: none;
+    }
+    .bar{
+        background: #000;
+        width: 25px;
+        height: 3px;
+        display: block;
+        margin-bottom: 4px;
+        margin-left: auto;
+        transition: all 0.6s ease;
+    }
+    .mobile-menu .menu-open{
+        display: none;
+        transform: translateX(500px);
     }
 }
