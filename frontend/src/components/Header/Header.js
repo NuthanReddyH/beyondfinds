@@ -41,8 +41,66 @@ const Header = () => {
               className="self-center h-10 w-auto"
             />
           </Link>
+          <div className="flex space-x-4 ml-auto items-center mobile-menu">
+          {isAuthenticated ? (
+              <>
+                <Link to="/favorites">
+                  <IconButton color="inherit">
+                    <FavoriteBorder />
+                  </IconButton>
+                </Link>
+                <Link to="/chat">
+                  <IconButton color="inherit">
+                    <MessageIcon />
+                  </IconButton>
+                </Link>
+                <AccountMenu user={user} handleLogout={handleLogout} />
+              </>
+            ) : (
+              <>
+                <Link
+                  to="/login"
+                  className="text-gray-500 hover:text-gray-700 focus:outline-none mt-1"
+                >
+                  Login
+                </Link>
+              </>
+            )}
+            <div className="menu-bar">
+              <span className="bar"></span>
+              <span className="bar"></span>
+              <span className="bar"></span>
+            </div>
+            <div className="menu-open">
+            <SearchComponent />
+            {showCategoryLinks && (
+        <div className="bottom-nav bg-gray-100 py-4">
+          <ul className="flex justify-between container mx-auto lg:px-16 sm:px-8">
+            <li>
+              <Link
+                to={`/products`}
+                className="hover:text-gray-700 focus:outline-none"
+              >
+                All
+              </Link>
+            </li>
+            {categories?.map((category) => (
+              <li key={category._id}>
+                <Link
+                  to={`/category/${category.name}/${category._id}`}
+                  className="hover:text-gray-700 focus:outline-none ml-2"
+                >
+                  {category.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+            </div>
+          </div>
 
-          <div className="flex space-x-4 ml-auto items-center">
+          <div className="flex space-x-4 ml-auto items-center main-menu">
             <SearchComponent />
             {isAuthenticated ? (
               <>
@@ -72,7 +130,7 @@ const Header = () => {
         </div>
       </nav>
       {showCategoryLinks && (
-        <div className="bottom-nav bg-gray-100 py-4">
+        <div className="bottom-nav bg-gray-100 py-4 main-menu">
           <ul className="flex justify-between container mx-auto lg:px-16 sm:px-8">
             <li>
               <Link

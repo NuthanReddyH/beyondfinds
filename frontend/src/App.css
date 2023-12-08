@@ -65,6 +65,7 @@ main {
   .slick-prev{
     left: -25px !important;
   }
+  
  }
 
 @media (prefers-reduced-motion: no-preference) {
