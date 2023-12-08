@@ -20,6 +20,7 @@ import ChatWindow from "./components/Chat/ChatWindow";
 import ForgotPassword from "./components/common/ForgotPassword";
 import OtpPage from "./components/Login/OtpPage";
 import ResetPassword from "./components/Login/ResetPassword";
+import AboutUs from "./components/About/About";
 
 // Lazy-loaded components
 const Home = lazy(() => import("./components/Home/Home"));
@@ -49,6 +50,7 @@ function App() {
           <main className="container mx-auto lg:px-16 sm:p-8">
             <Routes>
               <Route path="/" element={<Home />} />
+              <Route path="/AboutUs" element={<AboutUs />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/myAccount" element={<Account />} />
