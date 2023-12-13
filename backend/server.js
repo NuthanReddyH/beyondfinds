@@ -14,7 +14,7 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: 'http://localhost:3000',
+    origin: ['http://localhost:3000','https://beyondfinds.onrender.com/'],
     methods: ['GET', 'POST'],
   },
 });
@@ -23,7 +23,7 @@ const io = new Server(server, {
 app.use(cors({
   origin: function(origin, callback) {
     if (!origin) return callback(null, true);
-    const allowedOrigins = ['http://localhost:3000'];
+    const allowedOrigins = ['http://localhost:3000','https://beyondfinds.onrender.com'];
     if (allowedOrigins.indexOf(origin) === -1) {
       var msg = 'The CORS policy for this site does not ' +
                 'allow access from the specified Origin.';
