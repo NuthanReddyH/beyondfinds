@@ -1,5 +1,9 @@
 const path = require('path');
+const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+
+// Load environment variables from .env file
+require('dotenv').config();
 
 module.exports = {
   entry: './src/index.js', // Entry point of your application
@@ -51,6 +55,10 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: path.join(__dirname, 'public', 'index.html'),
       title: 'BeyondFinds',
+    }),
+    // DefinePlugin to set REACT_APP_API_BASE_URL globally
+    new webpack.DefinePlugin({
+      'process.env.REACT_APP_API_BASE_URL': JSON.stringify(process.env.REACT_APP_API_BASE_URL),
     }),
   ],
   resolve: {
