@@ -27,7 +27,7 @@ import ContactUs from "./components/ContactUs/ContactUs";
 const Home = lazy(() => import("./components/Home/Home"));
 const Footer = lazy(() => import("./components/Footer/Footer"));
 const Header = lazy(() => import("./components/Header/Header"));
-const Login = lazy(() => import("./components/login/Login"));
+const Login = lazy(() => import("./components/Login/Login"));
 const Register = lazy(() => import("./components/Register/Register"));
 const IndividualCategory = lazy(() => import("./components/IndividualCategory/IndividualCategory"));
 
