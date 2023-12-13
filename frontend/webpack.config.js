@@ -6,11 +6,12 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'dist'), // Output directory
     filename: 'bundle.js', // Output file name
+    publicPath: '/', // Public path for assets (e.g., images)
   },
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
@@ -21,7 +22,7 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader','postcss-loader'],
+        use: ['style-loader', 'css-loader', 'postcss-loader'],
       },
       {
         test: /\.(png|jpe?g|gif|svg)$/i,
@@ -30,17 +31,15 @@ module.exports = {
             loader: 'file-loader',
             options: {
               name: '[name].[ext]',
-              outputPath: 'assets/', // or 'assets/img/' or similar, depending on your preference
+              outputPath: 'assets/', // Output directory for images
             },
           },
         ],
-      }
+      },
     ],
   },
   devServer: {
-    static: {
-      directory: path.join(__dirname, 'public'),
-    },
+    contentBase: path.join(__dirname, 'public'), // Serve from the public directory
     compress: true,
     port: 3000,
     open: true,
@@ -52,4 +51,7 @@ module.exports = {
       title: 'BeyondFinds',
     }),
   ],
+  resolve: {
+    extensions: ['.js', '.jsx'],
+  },
 };
