@@ -22,13 +22,16 @@ const Favorites = () => {
   }, [dispatch]);
 
   // Filter favorite products
-  const favoriteProducts = products.filter(product =>
+  const favoriteProducts = products.filter((product) =>
     favoriteList?.includes(product._id)
   );
 
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = favoriteProducts.slice(indexOfFirstProduct, indexOfLastProduct);
+  const currentProducts = favoriteProducts.slice(
+    indexOfFirstProduct,
+    indexOfLastProduct
+  );
 
   const handlePageChange = (event, value) => {
     setCurrentPage(value);
@@ -37,9 +40,39 @@ const Favorites = () => {
   if (loading) return <Loader />;
   if (error) return <ErrorPage />;
 
+  if (currentProducts?.length === 0) {
+    return (
+      <div>
+        <Typography
+          variant="h4"
+          component="h2"
+          style={{ marginTop: "4rem", marginBottom: "4rem" }}
+        >
+          My Favorites
+        </Typography>
+        <Typography
+          variant="h5"
+          component="h2"
+          style={{
+            marginTop: "4rem",
+            marginBottom: "4rem",
+            textAlign: "center",
+          }}
+        >
+          you haven't saved any items to your wishlist yet. Start shopping and
+          add your favorite items to your wishlist.
+        </Typography>
+      </div>
+    );
+  }
+
   return (
     <div>
-      <Typography variant="h4" component="h2" style={{ marginTop: "4rem", marginBottom: "4rem" }}>
+      <Typography
+        variant="h4"
+        component="h2"
+        style={{ marginTop: "4rem", marginBottom: "4rem" }}
+      >
         My Favorites
       </Typography>
       <Grid container spacing={2}>

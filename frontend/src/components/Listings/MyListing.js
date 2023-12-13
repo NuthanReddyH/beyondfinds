@@ -36,14 +36,38 @@ const MyListings = () => {
   };
 
   if (loading) return <Loader />;
-  if (error) return <ErrorPage />;
+
+  if (userProducts.length === 0) {
+    return (
+      <div>
+        <Typography
+          variant="h4"
+          component="h2"
+          style={{ marginTop: "4rem", marginBottom: "4rem" }}
+        >
+          My Listings
+        </Typography>
+        <Typography
+          variant="h5"
+          component="h2"
+          style={{
+            marginTop: "4rem",
+            marginBottom: "4rem",
+            textAlign: "center",
+          }}
+        >
+          You haven't created any listings yet. Start by adding your items to create your first listing and showcase your products to potential buyers.
+        </Typography>
+      </div>
+    );
+  }
 
   return (
     <div>
       <Typography
         variant="h4"
         component="h2"
-        style={{ marginTop: "4rem", marginBottom: "4rem", }}
+        style={{ marginTop: "4rem", marginBottom: "4rem" }}
       >
         My Listings
       </Typography>
