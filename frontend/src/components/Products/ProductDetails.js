@@ -12,6 +12,7 @@ import {
   IconButton,
 } from "@mui/material";
 import { Close } from "@mui/icons-material";
+import Loader from "../Loader/Loader";
 
 const productStyles = {
   breadcrumbs: {
@@ -160,10 +161,15 @@ function ProductDetails() {
       );
     }
   };
+  const isLoading = !product;
 
   useEffect(() => {
     dispatch(fetchAllProducts());
   }, [dispatch]);
+
+  if (isLoading) {
+    return <Loader />;
+  }
 
   if (!product) return <div>Product not found!</div>;
 
