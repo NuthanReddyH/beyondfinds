@@ -90,7 +90,7 @@ const Header = () => {
             {showCategoryLinks && (
               <div className="bottom-nav py-4">
                 <ul className="flex flex-wrap container mx-auto lg:px-16 sm:px-8">
-                  <li>
+                  <li onClick={toggleMenu}>
                     <Link
                       to={`/products`}
                       className="hover:text-gray-700 focus:outline-none"
@@ -112,7 +112,7 @@ const Header = () => {
               </div>
             )}
       
-      <SearchComponent />
+      <SearchComponent toggleMenu={toggleMenu}/>
           </div>
 
           {/* <div className="flex space-x-4 ml-auto items-center main-menu">

@@ -6,7 +6,7 @@ import './Search.css';
 import { Link } from "react-router-dom";
 import { getImageData } from "../../utils";
 
-const SearchComponent = () => {
+const SearchComponent = ({toggleMenu}) => {
   const dispatch = useDispatch();
   const [searchTerm, setSearchTerm] = useState("");
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
@@ -43,6 +43,7 @@ const SearchComponent = () => {
   };
 
   const handleItemClick = () => {
+    toggleMenu();
     setIsDropdownVisible(false); // Close the dropdown when an item is clicked
   };
 
